@@ -5,11 +5,55 @@
         {% else %}
         <title>3D Houses</title>
         {% endif %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css" rel="stylesheet" />
     </head>
     <body>
-        <h1>Hello, {{ user.username }}!!!</h1>
-        {% for post in posts %}
-        <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
-        {% endfor %}
+        <div class="page-wrapper">
+            <div class="content-wrapper p-20">
+                <!-- DARK MODE BUTTON -->
+                <div class="position-absolute top-0 right-0 z-10 pr-20 p-10">
+                    <button class="btn btn-square" type="button" onclick="halfmoon.toggleDarkMode()">
+                        <i class="fa fa-moon-o" aria="true"></i>
+                    </button>
+                </div>
+                <h1>3D houses & Predictions</h1>
+                <!-- ADDRESS INPUT -->
+                <div class="form-group">
+                    <label for="address" class="required">Address</label>
+                    <input type="text" class="form-control" id="address" placeholder="Avenue de la tartiflette, 85" required="required">
+                </div>
+                <!-- GRID RESPONSIVE SYSTEM -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <!-- First card with Prediction -->
+                            <div class="card m-30 my-10">
+                                <h2 class="card-title">
+                                Predicted Price
+                                </h2>
+                                <p>
+                                    template_FLASK_PRICE_TO_SHOW
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <!-- Second card for the 3D object rendering -->
+                            <div class="card m-30 my-10">
+                                <div class="mh-full">
+                                    <h2 class="card-title">
+                                        It was going to rain
+                                    </h2>
+                                    <div class="text-center">
+                                        <img src="https://via.placeholder.com/400?text=3D+rendering+here" class="img-fluid" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
     </body>
 </html>
