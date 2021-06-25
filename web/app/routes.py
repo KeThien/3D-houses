@@ -1,10 +1,12 @@
-from flask import render_template
 from app import app
+from flask import render_template
+from .weather import RequestWeather
 
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'username' : 'Ke Thien'}
+    response = RequestWeather().request()
+    user = {'username' : 'Rien'}
     posts = [
         {
             'author': {'username': 'John'},
@@ -15,7 +17,7 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
+    return render_template('index.html', title='Home', user=user, weather=response)
 
 if __name__ == '__main__':
 	app.run(host="0.0.0.0", port=5000, debug=True)
