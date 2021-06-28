@@ -17,7 +17,7 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template('index.html', title='Home', user=user, weather=response)
+    return render_template('index.html', title='3D Houses', user=user, weather=response)
 
 if __name__ == '__main__':
 	app.run(host="0.0.0.0", port=5000, debug=True)

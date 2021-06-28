@@ -12,8 +12,8 @@ renderer.shadowMap.enabled = true;
 
 // CREATE THE SCENE
 const scene = new THREE.Scene();
-scene.background = new THREE.Color( 0x72645b );
-scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
+scene.background = new THREE.Color( 0x3241d19);
+// scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
 
 // CAMERA
 const fov = 35;
@@ -27,7 +27,7 @@ camera.position.y = 0.9173680258001311
 camera.position.z = 1
 
 const controls = new THREE.OrbitControls( camera, renderer.domElement );
-// controls.autoRotate = true
+controls.autoRotate = true
 
 // LIGHTS
 function addShadowedLight( x, y, z, color, intensity ) {
@@ -55,20 +55,20 @@ function addShadowedLight( x, y, z, color, intensity ) {
 }
 scene.add(new THREE.HemisphereLight( 0x443333, 0x111122 ) );
 addShadowedLight( 1, 1, 1, 0xffffff, 1.35 );
-addShadowedLight( 0.5, 1, - 1, 0xffaa00, 1 );
+addShadowedLight( 0.5, 1, - 1, 0xaaaabb, 1 );
 
 // AxesHelper
-const axesHelper = new THREE.AxesHelper( 5 );
-scene.add( axesHelper );
+// const axesHelper = new THREE.AxesHelper( 5 );
+// scene.add( axesHelper );
 
 // PLANE
 const plane = new THREE.Mesh(
   new THREE.PlaneBufferGeometry( 40, 40 ),
-  new THREE.MeshPhongMaterial( { color: 0x999999, specular: 0x101010 } )
+  new THREE.MeshStandardMaterial( { color: 0x1c1714, specular: 0x101010 } )
 );
 plane.rotation.x = - Math.PI / 2;
 plane.position.y = - 0.5;
-scene.add( plane );
+// scene.add( plane );
 
 plane.receiveShadow = false;
 
@@ -106,7 +106,7 @@ loader.load( "./static/3d-models/mymesh.ply", function ( geometry ) {
   // mesh.position.z = 0;
   mesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), -1.5708);
   // mesh.rotation.x = - Math.PI / 2;
-  mesh.scale.multiplyScalar( 0.006 );
+  mesh.scale.multiplyScalar( 0.0087 );
 
   mesh.castShadow = true;
   mesh.receiveShadow = true;
@@ -124,19 +124,19 @@ loader.load( "./static/3d-models/mymesh.ply", function ( geometry ) {
   scene.add( mesh );
 })
 // CREATE CUBE
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshPhongMaterial( { color: 0x8844aa } );
-const cube = new THREE.Mesh( geometry, material );
+// const geometry = new THREE.BoxGeometry();
+// const material = new THREE.MeshPhongMaterial( { color: 0x8844aa } );
+// const cube = new THREE.Mesh( geometry, material );
 // scene.add( cube );
 
 // ANIMATION LOOP
-function animate() {
+function rendering() {
   if (resizeRendererToDisplaySize(renderer)) {
     const canvas = renderer.domElement;
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
   }
-	requestAnimationFrame( animate );
+	requestAnimationFrame( rendering );
   // cube.rotation.x += 0.01;
 	// cube.rotation.y += 0.01;
   controls.update();
@@ -147,7 +147,7 @@ function animate() {
   
   renderer.render(scene, camera);
 }
-animate();
+rendering();
 
 // RESPONSIVE func
 function resizeRendererToDisplaySize(renderer) {
