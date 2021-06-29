@@ -6,6 +6,8 @@ import open3d as o3d
 from polygon_collector import collector
 from shapely.geometry import Polygon, Point, LineString
 from shapely.affinity import scale
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def draw_area(tif: str, adress: str ,city: str, cadastre_path: str='', save :bool=True, filepath: str='my_mesh.pyl') -> None:
@@ -21,7 +23,7 @@ def draw_area(tif: str, adress: str ,city: str, cadastre_path: str='', save :boo
     
     """
     DSM = tif
-    DSM = rasterio.open(DSM)
+    DSM = rasterio.open(dir_path + "/" + DSM)
     DSM_array = DSM.read(1)
     DSM_array = np.where(DSM_array==-9999,0 , DSM_array)
 
@@ -68,11 +70,11 @@ def draw_area(tif: str, adress: str ,city: str, cadastre_path: str='', save :boo
     pcd.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
 
     poisson_mesh = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd, depth=8, width=0, scale=1.1, linear_fit=False)[0]
-    o3d.visualization.draw_geometries([poisson_mesh])   
+    o3d.visualization.draw_geometries([poisson_mesh])
     if save: 
         o3d.io.write_triangle_mesh(filepath, poisson_mesh)
 
 
 if __name__=='__main__':
     #require OOSTKAMP_L72_2020 Folder from minfin.fgov.be
-    draw_area(r'DSM13.tif', 'Sijslostraat 39, 8020', 'OOSTKAMP', save=True, filepath="my_mesh.ply")
+    draw_area(r'DSM13.tif', 'Sijslostraat 39, 8020', 'OOSTKAMP', cadastre_path=dir_path + "/OOSTKAMP_L72_2021", save=True, filepath="my_mesh.ply")
