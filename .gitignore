@@ -1,3 +1,4 @@
+.vscode
 # Big geotif files
 *.tif
 web/app/scripts/OOSTKAMP*
