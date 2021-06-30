@@ -6,6 +6,7 @@ import open3d as o3d
 from polygon_collector import collector, house_collector
 from shapely.geometry import Polygon, Point, LineString, box
 from shapely.affinity import scale
+import time
 
 
 def draw_houses():
@@ -20,7 +21,7 @@ def draw_houses():
 
     poly = collector('Sijslostraat 39, 8020', 'OOSTKAMP')
 
-
+    start = time.time()
     coords = list(poly.exterior.coords)
     lines = poly.exterior.buffer(0.5)
     min_x, max_x = coords[0][0], coords[0][0]
@@ -33,13 +34,26 @@ def draw_houses():
     area_limiter_points = [Point(int(min_x)-5, int(min_y)-5),Point(int(min_x)-5, int(max_y)+5),Point(int(max_x)+5, int(max_y)+5),Point(int(max_x)+5, int(min_y)-5)]
     area_polygon = Polygon(area_limiter_points)
     houses = house_collector(area_polygon, 'OOSTKAMP')
+    houses = [extend_polygon(house) for house in houses]
+    house_pieces = [convex_pieces(house) for house in houses]
 
+
+    
+
+    
     np_points = []
     np_houses = [[] for x in range(len(houses))]
     np_color_houses = [[] for x in range(len(houses))]
     np_line = []
     np_color_line = []
-
+    np_house_pieces = [[] for i in range(len(houses))]
+    for i in range(len(np_house_pieces)):
+        for j in range(len(house_pieces[i])):
+            np_house_pieces[i].append([])
+    np_house_pieces_color = [[] for i in range(len(houses))]
+    for i in range(len(np_house_pieces_color)):
+        for j in range(len(house_pieces[i])):
+            np_house_pieces_color[i].append([] )
     for x in range(int(min_x)-5, int(max_x)+1+5):
         for y in range(int(min_y)-5, int(max_y)+1+5):
             #if poly.contains(Point(x,y)):
@@ -50,14 +64,25 @@ def draw_houses():
                     np_color_line.append([1, 0,0])
                 for i in range(len(houses)):
                     if houses[i].contains(Point(x,y)):
-                        np_houses[i].append([x,y, DSM_array[DSM.index(x, y)]])
-                        #np_houses[i].append([x,y, DTM_array[DSM.index(x, y)]])
+                        heigth = DSM_array[DSM.index(x, y)]
+                        np_houses[i].append([x,y, heigth])
+                            #np_houses[i].append([x,y, DTM_array[DSM.index(x, y)]])
                         np_color_houses[i].append([0,0,1])
-                        #np_color_houses[i].append([0,0,1])
+                            #np_color_houses[i].append([0,0,1])
+                for i in range(len(house_pieces)):
+                    for j in range(len(house_pieces[i])):
+                            if house_pieces[i][j].contains(Point(x,y)):      
+                                heigth = DSM_array[DSM.index(x, y)]
+                                np_house_pieces[i][j].append([x,y, heigth])
+                                #np_houses[i].append([x,y, DTM_array[DSM.index(x, y)]])
+                                np_house_pieces_color[i][j].append([0,0,1])
+                                #np_color_houses[i].append([0,0,1])
             except:
                 continue
-        
-        
+    
+    
+    
+    
 
     np_points = np.array(np_points)
     np_line = np.array(np_line)
@@ -84,25 +109,6 @@ def draw_houses():
     pcd.points = o3d.utility.Vector3dVector(np_points)
     pcd.colors = o3d.utility.Vector3dVector(np_color)
 
-    pcd_houses = [[] for x in range(len(houses))]
-    for i in range(len(houses)):
-        pcd_houses[i] = o3d.geometry.PointCloud()
-        pcd_houses[i].points = o3d.utility.Vector3dVector(np_houses[i])
-        pcd_houses[i].colors = o3d.utility.Vector3dVector(np_color_houses[i])
-
-    
-    
-    
-        
-
-    pcd_line = o3d.geometry.PointCloud()
-    pcd_line.points = o3d.utility.Vector3dVector(np_line)
-    pcd_line.colors = o3d.utility.Vector3dVector(np_line)
-
-    pcd.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
-
-
-    poisson_mesh = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd, depth=8, width=0, scale=1.1, linear_fit=False)[0]
     pcd_walls = []
     pcd_corner = []
     heights = []
@@ -115,6 +121,73 @@ def draw_houses():
         local_point.colors = o3d.utility.Vector3dVector(color)
         pcd_corner.append(local_point)
 
+    for i in range(len(houses)):
+        for x,y in houses[i].exterior.coords:
+            np_houses[i].append([x,y, heights[i]])
+            np_color_houses[i].append([0,0,1])
+
+    pcd_houses_pieces = [[] for x in range(len(house_pieces))]
+    pcd_houses_pieces_meshes = [[] for x in range(len(house_pieces))]
+    for i in range(len(np_house_pieces)):
+        for j in range(len(house_pieces[i])):
+            pcd_houses_pieces[i].append([])
+            pcd_houses_pieces_meshes[i].append([])
+    for i in range(len(house_pieces)):
+        for j in range(len(house_pieces[i])):
+            poly =  house_pieces[i][j]
+            
+            for x,y in poly.exterior.coords:
+                np_house_pieces[i][j].append([x,y, heights[i]])
+                np_house_pieces_color[i][j].append([0,0,1])
+            np_house_pieces[i][j] = np.array(np_house_pieces[i][j])
+            np_house_pieces_color[i][j] = np.array(np_house_pieces_color[i][j])
+            pcd_houses_pieces[i][j] = o3d.geometry.PointCloud()
+            pcd_houses_pieces[i][j].points = o3d.utility.Vector3dVector(np_house_pieces[i][j])
+            pcd_houses_pieces[i][j].colors = o3d.utility.Vector3dVector(np_house_pieces_color[i][j])
+            try:
+                pcd_houses_pieces_meshes[i][j].append(pcd_houses_pieces[i][j].compute_convex_hull()[0])
+            except:
+                continue
+    pcd_houses_meshes_connected = []
+    for i in range(len(house_pieces)):
+        for j in range(len(house_pieces[i])):
+            try:
+                pcd_houses_meshes_connected.append(pcd_houses_pieces_meshes[i][j][0])
+            except:
+                continue
+
+            
+
+    pcd_houses = [[] for x in range(len(houses))]
+    for i in range(len(houses)):
+        pcd_houses[i] = o3d.geometry.PointCloud()
+        pcd_houses[i].points = o3d.utility.Vector3dVector(np_houses[i])
+        pcd_houses[i].colors = o3d.utility.Vector3dVector(np_color_houses[i])
+
+    
+    pcd_line = o3d.geometry.PointCloud()
+    pcd_line.points = o3d.utility.Vector3dVector(np_line)
+    pcd_line.colors = o3d.utility.Vector3dVector(np_line)
+
+    pcd.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
+
+
+    poisson_mesh = o3d.geometry.TriangleMesh.create_from_point_cloud_poisson(pcd, depth=8, width=0, scale=1.1, linear_fit=False)[0]
+    tetra_meshes, pts_map = [], []
+    for pcd_house in pcd_houses:
+        tetra_mesh, pt_map = o3d.geometry.TetraMesh.create_from_point_cloud(pcd_house)
+        tetra_meshes.append(tetra_mesh)
+        pts_map.append(pt_map)
+    pcd_houses_meshes = [pcd_house.compute_convex_hull()[0] for pcd_house in pcd_houses]
+    for pcd_house_mesh in pcd_houses_meshes:
+        pcd_house_mesh.paint_uniform_color([1, 0, 0])
+    tetra_mesh, pt_map = o3d.geometry.TetraMesh.create_from_point_cloud(pcd)
+    for pcd_houses_mesh in pcd_houses_meshes:
+        pcd_houses_mesh.compute_vertex_normals()
+
+    
+    
+
     pcd_roofs = []
     for i in range(len(houses)):
         pcd_roof = build_roof(pcd_houses[i], houses[i], heights[i])
@@ -122,8 +195,8 @@ def draw_houses():
             pcd_roofs.append(pcd_roof)
     #pcd_roofs2 = [build_roof(pcd_house)[1] for pcd_house in pcd_houses]
 
-    
-    o3d.visualization.draw_geometries([poisson_mesh, *pcd_houses, *pcd_walls, *pcd_corner, *pcd_roofs]) 
+    print(time.time()-start)
+    o3d.visualization.draw_geometries([poisson_mesh, *pcd_walls, *pcd_houses_meshes_connected], mesh_show_back_face=True) #*pcd_roofs, *pcd_houses  *pcd_corner,*tetra_meshes, *pcd_houses_meshes , pcd_houses_pieces_meshes 
 
     
 
@@ -164,7 +237,6 @@ def build_house(house, DSM, DSM_array, DTM, DTM_array):
 
 def build_roof(roof, house, height):
     house = extend_polygon(house)
-    print(list(house.exterior.coords))
     roof.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=16), fast_normal_computation=True)
     plane_model, inliers = roof.segment_plane(distance_threshold=0.1, ransac_n=3, num_iterations=1000)
     inlier_cloud = roof.select_by_index(inliers)
@@ -213,22 +285,49 @@ def build_roof(roof, house, height):
         roof_mesh.paint_uniform_color([1, 0, 0])
     return roof_mesh
 
+def convex_pieces(house):
+    convex_pieces = []
+    coords = list(house.exterior.coords)
+    coords = coords[:-1]
+    n = len(coords)
+    for i in range(n-2):
+        points = [coords[i], coords[i+1], coords[i+2]]
+        poly = Polygon(points)
+        if not house.contains(poly.convex_hull):
+            pass
+        j = (i+3) %n
+        
+        while j!=i:
+            new_points = list(points)
+            new_points.append(coords[j])
+            new_poly = Polygon(new_points)
+            if not new_poly.is_valid:
+                j = (j+1) %n
+            elif house.contains(new_poly.convex_hull):
+                poly = new_poly
+                points = new_points
+                j = (j+1) %n
+            else:
+                j = (j+1) %n  
+        if house.contains(poly.convex_hull):
+            convex_pieces.append(poly)
+    return convex_pieces
+
 def extend_polygon(polygon):
-    coords = polygon.exterior.coords
-    new_coords= polygon.exterior.coords
+    coords = list(polygon.exterior.coords)
+    new_coords= list(polygon.exterior.coords)
+    bound_max = np.array(coords).max().max()+1
+    bound_min = np.array(coords).min().min()-1  
     for i in range(len(coords)-1):
         p1 = coords[i]
         p2 = coords[i+1]
-        bound_max = np.array(polygon.exterior.coords).max().max()+1
-        bound_min = np.array(polygon.exterior.coords).min().min()-1
         line1 = extended_line(p1, p2, bound_min, bound_max)
         j=0
         while j < len(new_coords)-1:
             line2 = LineString([Point(new_coords[j]), Point(new_coords[j+1])])
             new_point = line1.intersection(line2)
-            
             if new_point:
-                if new_point.distance(Point(new_coords[j+1]))>1 and new_point.distance(Point(new_coords[j]))>1:
+                if new_point.distance(Point(new_coords[j+1]))>0.1 and new_point.distance(Point(new_coords[j]))>0.1:
                     new_coords = new_coords[:j+1] +[[new_point.x, new_point.y]]+ new_coords[j+1:]
                 j+=1
             else:
