@@ -14,7 +14,7 @@ def index():
         },
         {
             'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
+            'body': 'H2G2 movie was so cool!'
         }
     ]
     return render_template('index.html', title='3D Houses', user=user, weather=response)
