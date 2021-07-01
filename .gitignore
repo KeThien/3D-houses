@@ -1,3 +1,7 @@
+.vscode
+# Big geotif files
+*.tif
+web/app/scripts/OOSTKAMP*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
