@@ -1,8 +1,7 @@
+import os
 from app import app
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 from .weather import RequestWeather
-
-votes = 0
 
 
 @app.route('/')
@@ -52,6 +51,17 @@ def submit():
     if request.method == 'POST':
         keyword = request.form['keyword']
         return keyword
+
+
+@app.route('/predict', methods=['POST', 'GET'])
+def predict():
+    if request.method == 'POST':
+        number = request.form['nm']
+        return redirect(url_for('success', name=number))
+
+    else:
+        number = request.args.get('nm')
+        return redirect(url_for('success', name=number))
 
 
 if __name__ == '__main__':
