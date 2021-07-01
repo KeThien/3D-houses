@@ -56,23 +56,58 @@
                       <form action="http://0.0.0.0:5000/predict" method="post">
 
                          <p><input type="text" class="form-control form-control-lg" style="max-width:20%;display: initial" name="rue" placeholder="Rue">
-                         <input type="text" class="form-control form-control-lg" style="max-width:4em;display: initial" name="num" placeholder="Num."></p>
+                             <input type="text" class="form-control form-control-lg" style="max-width:4em;display: initial" name="num" placeholder="Num."></p>
                          <p><input type="text" class="form-control form-control-lg" name="Locality" placeholder="CP">
                          <input type="text" class="form-control form-control-lg" name="ville" placeholder="Ville"></p>
                          <p><input type="text" class="form-control form-control-lg" name="Type of property" placeholder="Type of property"></p>
-                          <p><input type="text" class="form-control form-control-lg" name="Subtype of property" placeholder="Subtype of property"></p>
+                             <p><input type="text" class="form-control form-control-lg" name="Subtype of property" placeholder="Subtype of property"></p>
                          <p><input type="text" class="form-control form-control-lg" name="Number of facades" placeholder="Number of facades"></p>
                          <p><input type="text" class="form-control form-control-lg" name="Number of rooms" placeholder="Number of rooms"></p>
                          <p><input type="text" class="form-control form-control-lg" name="Surface of the land" placeholder="Surface of the land"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Fully equipped kitchen" placeholder="Fully equipped kitchen"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Terrace" placeholder="Terrace"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Terrace Area" placeholder="Terrace Area"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Garden" placeholder="Garden"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Garden Area" placeholder="Garden Area"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Swimming pool" placeholder="Swimming pool"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Furnished" placeholder="Furnished"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Open fire" placeholder="Open fire"></p>
 
+                          <label for="Fully equipped kitchen">Fully equipped kitchen</label>
+                        <select  name="Fully equipped kitchen" id="Fully equipped kitchen">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+
+                         <p><input type="text" class="form-control form-control-lg" name="Terrace" placeholder="Terrace"></p>
+
+                          <label for="Terrace">Terrace</label>
+                        <select  name="Terrace" id="Terrace">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+
+                         <p><input type="text" class="form-control form-control-lg" name="Terrace Area" placeholder="Terrace Area"></p>
+
+                          <label for="Garden">Garden</label>
+                        <select  name="Terrace" id="Garden">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+
+                         <p><input type="text" class="form-control form-control-lg" name="Garden Area" placeholder="Garden Area"></p>
+
+                          <label for="Swimming pool">Swimming pool</label>
+                        <select  name="Swimming pool" id="Swimming pool">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+
+                          <label for="Furnished">Furnished</label>
+                        <select  name="Furnished" id="Furnished">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+
+                          <p><input type="text" class="form-control form-control-lg" name="Open fire" placeholder="Open fire"></p>
+
+                          <label for="Open fire">Open fire</label>
+                        <select  name="Open fire" id="Open fire">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
                          <p><input type="submit" value="submit"></p>
                       </form>
                 <h2 class="card-title">Predicted Price</h2>
