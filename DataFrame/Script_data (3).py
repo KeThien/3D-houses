@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[4]:
 
 
 import requests
@@ -14,7 +14,6 @@ import os
 import pickle
 import shutil
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 # In[ ]:
@@ -36,7 +35,8 @@ def belgique(f):
 
 
 
-def ville(df)
+def ville(df):
+    
     for i in df.index:
         list_ville.append(i)
     print(list_ville)
@@ -46,7 +46,9 @@ def ville(df)
 
 
 
-def ville_INS(a):
+def ville_INS(x):
+    
+    x = a
     objet = df.loc[[a], ['Code INS']]
     b = objet['Code INS'].values
      
@@ -59,7 +61,10 @@ def ville_INS(a):
 
 def save(nis):
     
-    with open(f"{dir_path}/L72_{a}.zip', 'wb') as fp:
+    nis = ville_ins(x)
+    x = a
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    with open(f'{dir_path}/L72_{a}.zip', 'wb') as fp:
         req = requests.get(f'https://eservices.minfin.fgov.be/myminfin-rest/cadastral-plan/cadastralPlan/2021/{nis}/72')
         fp.write(req.content)
         
@@ -71,6 +76,9 @@ def save(nis):
 
 
 def dezip(file):
+    
+    x = a
+    dir_path = os.path.dirname(os.path.realpath(__file__))
     with zipfile.ZipFile(file, 'r') as zip: 
         zip.extract('Bpn_CaPa.dbf', f'{dir_path}/L72_{a}_extract')
         zip.extract('Bpn_CaPa.prj', f'{dir_path}/L72_{a}_extract')
@@ -117,6 +125,8 @@ def dezip(file):
 
 def CaPa_New(shapefile):
     
+    x = a
+    dir_path = os.path.dirname(os.path.realpath(__file__))
     new_shape_capa = shapefile_CaPa[['CaPaKey','geometry']]
     output = open(f'{dir_path}/L72_{a}_clear/Bpn_CaPa_clear.pickle','wb')
     pickle.dump(new_shape_capa, output)
@@ -129,7 +139,9 @@ def CaPa_New(shapefile):
 
 
 def CaBu_New(shapefile_CaBu):
-
+    
+    x = a
+    dir_path = os.path.dirname(os.path.realpath(__file__))
     new_shape_cabu = shapefile_CaBu[shapefile_CaBu['Type'] =='CL']
     new_shape_cabu = new_shape_cabu[['Shape_area','geometry']]
     output = open(f'{dir_path}/L72_{a}_clear/Bpn_CaBu_clear.pickle','wb')
@@ -144,12 +156,14 @@ def CaBu_New(shapefile_CaBu):
 
 def ReBu_New(shapefile_ReBu):
     
-        new_shape_rebu = shapefile_ReBu[['TYPE', 'geometry']]
-        output = open(f'{dir_path}/L72_{a}_clear/Bpn_ReBu_clear.pickle','wb')
-        pickle.dump(new_shape_rebu, output)
-        output.close()
+    x = a
+    dir_path = os.path.dirname(os.path.realpath(__file__))    
+    new_shape_rebu = shapefile_ReBu[['TYPE', 'geometry']]
+    output = open(f'{dir_path}/L72_{a}_clear/Bpn_ReBu_clear.pickle','wb')
+    pickle.dump(new_shape_rebu, output)
+    output.close()
         
-        return new_shape_rebu
+    return new_shape_rebu
    
 
 
@@ -158,12 +172,14 @@ def ReBu_New(shapefile_ReBu):
 
 def CaDi_New(shapefile_CaDi):
     
-        new_shape_cadi = shapefile_CaDi[['CaDiKey','NameDUT','geometry']]
-        output = open(f'{dir_path}/L72_{a}_clear/Apn_CaDi_clear.pickle','wb')
-        pickle.dump(new_shape_cadi, output)
-        output.close()
+    x = a
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    new_shape_cadi = shapefile_CaDi[['CaDiKey','NameDUT','geometry']]
+    output = open(f'{dir_path}/L72_{a}_clear/Apn_CaDi_clear.pickle','wb')
+    pickle.dump(new_shape_cadi, output)
+    output.close()
         
-        return new_shape_cadi
+    return new_shape_cadi
     
     
 
@@ -171,10 +187,12 @@ def CaDi_New(shapefile_CaDi):
 # In[ ]:
 
 
-a = input('Entrez le nom de la ville: ')
+x = input('Entrez le nom de la ville: ')
 
-def fonc_final(a):
+def fonc_final(x):
     
+    x = a
+    dir_path = os.path.dirname(os.path.realpath(__file__))
     f = open(f"{dir_path}/Belgique.csv")
     belgique(f)
     
@@ -215,5 +233,5 @@ def fonc_final(a):
     shutil.rmtree(f'{dir_path}/L72_{a}_extract')
     os.remove(f'{dir_path}/L72_{a}.zip', 'wb')
     
-fonc_final(a)
+fonc_final(x)
 
