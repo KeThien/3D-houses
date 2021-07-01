@@ -24,7 +24,7 @@
     <script src="./static/js/PLYLoader.js"></script>
     <script src="./static/js/GLTFLoader.js"></script>
     <div class="page-wrapper">
-      <div class="content-wrapper p-20">
+      <div-- class="content-wrapper p-20">
         <!-- DARK MODE BUTTON -->
         <div class="position-absolute top-0 right-0 z-10 pr-20 p-10">
           <button
@@ -37,8 +37,8 @@
         </div>
         <h1>3D Houses & Predictions</h1>
         <!-- ADDRESS INPUT -->
-        <div class="form-group">
-          <!-- <label for="address" class="required">Address</label> -->
+        <!--div class="form-group">
+          <!-- <label for="address" class="required">Address</label> -- >
           <input
             type="text"
             class="form-control form-control-lg"
@@ -46,12 +46,40 @@
             placeholder="Avenue de la tartiflette, 85"
             required="required"
           />
-        </div>
+        </div-->
         <!-- GRID RESPONSIVE SYSTEM -->
         <div class="container-fluid">
           <div class="row">
             <div class="col-lg-6">
               <!-- First card with Prediction -->
+                <div class="form-group">
+                      <form action="http://0.0.0.0:5000/predict" method="post">
+
+                         <p><input type="text" class="form-control form-control-lg" style="max-width:20%;display: initial" name="rue" placeholder="Rue">
+                         <input type="text" class="form-control form-control-lg" style="max-width:4em;display: initial" name="num" placeholder="Num."></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Locality" placeholder="CP">
+                         <input type="text" class="form-control form-control-lg" name="ville" placeholder="Ville"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Type of property" placeholder="Type of property"></p>
+                          <p><input type="text" class="form-control form-control-lg" name="Subtype of property" placeholder="Subtype of property"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Number of facades" placeholder="Number of facades"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Number of rooms" placeholder="Number of rooms"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Surface of the land" placeholder="Surface of the land"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Fully equipped kitchen" placeholder="Fully equipped kitchen"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Terrace" placeholder="Terrace"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Terrace Area" placeholder="Terrace Area"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Garden" placeholder="Garden"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Garden Area" placeholder="Garden Area"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Swimming pool" placeholder="Swimming pool"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Furnished" placeholder="Furnished"></p>
+                         <p><input type="text" class="form-control form-control-lg" name="Open fire" placeholder="Open fire"></p>
+
+                         <p><input type="submit" value="submit"></p>
+                      </form>
+                <h2 class="card-title">Predicted Price</h2>
+                <p>PRICE_TO_SHOW</p>
+              </div>
+
+
               <div class="card mx-20 my-10">
                 <h2 class="card-title">Predicted Price</h2>
                 <p>PRICE_TO_SHOW</p>
