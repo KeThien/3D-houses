@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[3]:
 
 
 import requests
@@ -22,20 +22,24 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 
-f = open(f"{dir_path}/Belgique.csv")
-belgique= pd.read_csv(f, sep = ';')
-df = belgique[['Code INS','Entités administratives']]
-df.set_index('Entités administratives',inplace=True)
+def belgique(f):
+    
+    bel= pd.read_csv(f, sep = ';')
+    df = bel[['Code INS','Entités administratives']]
+    df = df.set_index('Entités administratives',inplace=True)
+    
+    return df
+    
 
 
 # In[ ]:
 
 
-list_ville = []
-for i in df.index:
-    list_ville.append(i)
-print(list_ville)
-    
+
+def ville(df)
+    for i in df.index:
+        list_ville.append(i)
+    print(list_ville)
 
 
 # In[ ]:
@@ -170,6 +174,12 @@ def CaDi_New(shapefile_CaDi):
 a = input('Entrez le nom de la ville: ')
 
 def fonc_final(a):
+    
+    f = open(f"{dir_path}/Belgique.csv")
+    belgique(f)
+    
+    list_ville = []
+    ville(df)
     
     
     ville_INS(a)
