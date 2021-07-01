@@ -1,6 +1,6 @@
 import pickle
 
-from lat_long import get_lat_from_zip, get_long_from_zip
+from .lat_long import get_lat_from_zip, get_long_from_zip
 import pandas as pd
 
 
@@ -12,20 +12,31 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df.drop(axis=1, labels="Type of sale")
 
     df.loc[df["Subtype of property"] == "villa", 'Type of property'] = "house"
-    df.loc[df["Subtype of property"] == "loft", 'Type of property'] = "apartment"
-    df.loc[df["Subtype of property"] == "mansion", 'Type of property'] = "house"
-    df.loc[df["Subtype of property"] == "penthouse", 'Type of property'] = "apartment"
-    df.loc[df["Subtype of property"] == "duplex", 'Type of property'] = "apartment"
-    df.loc[df["Subtype of property"] == "investment property", 'Type of property'] = "house"
+    df.loc[df["Subtype of property"] == "loft",
+           'Type of property'] = "apartment"
+    df.loc[df["Subtype of property"] ==
+           "mansion", 'Type of property'] = "house"
+    df.loc[df["Subtype of property"] == "penthouse",
+           'Type of property'] = "apartment"
+    df.loc[df["Subtype of property"] == "duplex",
+           'Type of property'] = "apartment"
+    df.loc[df["Subtype of property"] ==
+           "investment property", 'Type of property'] = "house"
 
-    df.loc[df["Url"].str.contains("immeuble-de-rapport-a-vendre"), 'Type of property'] = "house"
-    df.loc[df["Url"].str.contains("immeuble-de-rapport-a-vendre"), 'Subtype of property'] = "investment property"
+    df.loc[df["Url"].str.contains(
+        "immeuble-de-rapport-a-vendre"), 'Type of property'] = "house"
+    df.loc[df["Url"].str.contains(
+        "immeuble-de-rapport-a-vendre"), 'Subtype of property'] = "investment property"
 
     df.loc[df["Number of rooms"] == 0, 'Number of rooms'] = None
-    df.loc[((df["Number of rooms"].isnull()) & (df["Subtype of property"] == "studio")), 'Number of rooms'] = 0
-    df.loc[((df["Number of rooms"].isnull()) & (df["Subtype of property"] == "student")), 'Number of rooms'] = 0
-    df.loc[((df["Number of facades"].isnull()) & (df["Type of property"] == "apartment")), 'Number of facades'] = 2
-    df.loc[(df["Garden Area"].isnull()) & (df["Garden"] == 0), "Garden Area"] = 0
+    df.loc[((df["Number of rooms"].isnull()) & (
+        df["Subtype of property"] == "studio")), 'Number of rooms'] = 0
+    df.loc[((df["Number of rooms"].isnull()) & (
+        df["Subtype of property"] == "student")), 'Number of rooms'] = 0
+    df.loc[((df["Number of facades"].isnull()) & (
+        df["Type of property"] == "apartment")), 'Number of facades'] = 2
+    df.loc[(df["Garden Area"].isnull()) & (
+        df["Garden"] == 0), "Garden Area"] = 0
     df.loc[((df["Subtype of property"].isnull()) & (
             df["Type of property"] == "apartment")), "Subtype of property"] = "apartment"
     df.loc[((df["Subtype of property"].isnull()) & (
@@ -48,7 +59,8 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df['Price'] < 30000000]
 
     to_replace = {None: "good"}
-    df["State of the building"] = df["State of the building"].replace(to_replace)
+    df["State of the building"] = df["State of the building"].replace(
+        to_replace)
     df["Locality"] = df["Locality"].astype(str)
     df['lat'] = df["Locality"].apply(get_lat_from_zip)
     df['long'] = df["Locality"].apply(get_long_from_zip)

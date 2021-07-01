@@ -1,5 +1,4 @@
-import create_model
-import preprocess
-import to_predict
-import lat_long
-
+from . import create_model
+from . import preprocess
+from . import to_predict
+from . import lat_long

@@ -1,9 +1,9 @@
+import ML
 import os
 import sys
 sys.path.extend(os.path.join(os.path.dirname(__file__), "ML"))
 sys.path.extend(os.path.join(os.path.dirname(__file__), "scrap"))
-import ML
-import scrap
+# import scrap
 
 
 def print_hi(name):
@@ -39,7 +39,6 @@ if __name__ == '__main__':
                       "Garden": [0], "Locality": [1200], "Area": [120], "State of the building": ["good"],
                       "Type of property": ["apartment"], "Number of facades": [2]}
         ML.to_predict.to_predict(to_predict)
-
 
         # Maison blanche
         to_predict = {"Number of rooms": [5], "Fully equipped kitchen": [1], "Terrace": [1], "Terrace Area": [8],

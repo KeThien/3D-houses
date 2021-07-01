@@ -1,10 +1,11 @@
 
-from preprocess import preprocess_data
+from .preprocess import preprocess_data
 import pandas as pd
 import pickle
 
 
 path_model: str = "Eliza_XGB_Model.pkl"
+
 
 def load_model():
     # Load the Model back from file
@@ -40,4 +41,3 @@ def to_predict(to_predict: dict):
 
     prediction = model.predict(df_to_predict)
     print(prediction, '€')
-
