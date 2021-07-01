@@ -62,7 +62,7 @@ def ville_INS(x):
 def save(nis):
     
     nis = ville_ins(x)
-    x = a
+    a = x
     dir_path = os.path.dirname(os.path.realpath(__file__))
     with open(f'{dir_path}/L72_{a}.zip', 'wb') as fp:
         req = requests.get(f'https://eservices.minfin.fgov.be/myminfin-rest/cadastral-plan/cadastralPlan/2021/{nis}/72')
@@ -77,7 +77,7 @@ def save(nis):
 
 def dezip(file):
     
-    x = a
+    a = x
     dir_path = os.path.dirname(os.path.realpath(__file__))
     with zipfile.ZipFile(file, 'r') as zip: 
         zip.extract('Bpn_CaPa.dbf', f'{dir_path}/L72_{a}_extract')
@@ -125,7 +125,7 @@ def dezip(file):
 
 def CaPa_New(shapefile):
     
-    x = a
+    a = x
     dir_path = os.path.dirname(os.path.realpath(__file__))
     new_shape_capa = shapefile_CaPa[['CaPaKey','geometry']]
     output = open(f'{dir_path}/L72_{a}_clear/Bpn_CaPa_clear.pickle','wb')
@@ -140,7 +140,7 @@ def CaPa_New(shapefile):
 
 def CaBu_New(shapefile_CaBu):
     
-    x = a
+    a = x
     dir_path = os.path.dirname(os.path.realpath(__file__))
     new_shape_cabu = shapefile_CaBu[shapefile_CaBu['Type'] =='CL']
     new_shape_cabu = new_shape_cabu[['Shape_area','geometry']]
@@ -156,7 +156,7 @@ def CaBu_New(shapefile_CaBu):
 
 def ReBu_New(shapefile_ReBu):
     
-    x = a
+    a = x
     dir_path = os.path.dirname(os.path.realpath(__file__))    
     new_shape_rebu = shapefile_ReBu[['TYPE', 'geometry']]
     output = open(f'{dir_path}/L72_{a}_clear/Bpn_ReBu_clear.pickle','wb')
@@ -172,7 +172,7 @@ def ReBu_New(shapefile_ReBu):
 
 def CaDi_New(shapefile_CaDi):
     
-    x = a
+    a = x
     dir_path = os.path.dirname(os.path.realpath(__file__))
     new_shape_cadi = shapefile_CaDi[['CaDiKey','NameDUT','geometry']]
     output = open(f'{dir_path}/L72_{a}_clear/Apn_CaDi_clear.pickle','wb')
@@ -191,7 +191,7 @@ x = input('Entrez le nom de la ville: ')
 
 def fonc_final(x):
     
-    x = a
+    a = x
     dir_path = os.path.dirname(os.path.realpath(__file__))
     f = open(f"{dir_path}/Belgique.csv")
     belgique(f)
