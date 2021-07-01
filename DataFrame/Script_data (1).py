@@ -117,6 +117,7 @@ def CaPa_New(shapefile):
     output = open(f'{dir_path}/L72_{a}_clear/Bpn_CaPa_clear.pickle','wb')
     pickle.dump(new_shape_capa, output)
     output.close()
+    
     return new_shape_capa
 
 
@@ -130,6 +131,7 @@ def CaBu_New(shapefile_CaBu):
     output = open(f'{dir_path}/L72_{a}_clear/Bpn_CaBu_clear.pickle','wb')
     pickle.dump(new_shape_cabu, output)
     output.close()
+    
     return new_shape_cabu
 
 
@@ -142,6 +144,7 @@ def ReBu_New(shapefile_ReBu):
         output = open(f'{dir_path}/L72_{a}_clear/Bpn_ReBu_clear.pickle','wb')
         pickle.dump(new_shape_rebu, output)
         output.close()
+        
         return new_shape_rebu
    
 
@@ -155,6 +158,7 @@ def CaDi_New(shapefile_CaDi):
         output = open(f'{dir_path}/L72_{a}_clear/Apn_CaDi_clear.pickle','wb')
         pickle.dump(new_shape_cadi, output)
         output.close()
+        
         return new_shape_cadi
     
     
@@ -163,9 +167,11 @@ def CaDi_New(shapefile_CaDi):
 # In[ ]:
 
 
+a = input('Entrez le nom de la ville: ')
+
 def fonc_final(a):
     
-    a = input('Entrez le nom de la ville: ')
+    
     ville_INS(a)
     
     nis = int(ville_INS(a))
@@ -198,4 +204,6 @@ def fonc_final(a):
     
     shutil.rmtree(f'{dir_path}/L72_{a}_extract')
     os.remove(f'{dir_path}/L72_{a}.zip', 'wb')
+    
+fonc_final(a)
 
