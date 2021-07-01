@@ -33,11 +33,23 @@ def draw_houses():
 
     area_limiter_points = [Point(int(min_x)-5, int(min_y)-5),Point(int(min_x)-5, int(max_y)+5),Point(int(max_x)+5, int(max_y)+5),Point(int(max_x)+5, int(min_y)-5)]
     area_polygon = Polygon(area_limiter_points)
-    houses = house_collector(area_polygon, 'OOSTKAMP')
+    #houses = house_collector(area_polygon, 'OOSTKAMP')
+    houses = house_collector(poly, 'OOSTKAMP')
     houses = [extend_polygon(house) for house in houses]
     house_pieces = [convex_pieces(house) for house in houses]
 
 
+    pcd_walls = []
+    pcd_corner = []
+    heights = []
+    for house in houses:
+        wall, point, color, height = build_house(house, DSM, DSM_array, DTM, DTM_array)
+        pcd_walls.append(wall)
+        heights.append(height)
+        local_point = o3d.geometry.PointCloud()
+        local_point.points = o3d.utility.Vector3dVector(point)
+        local_point.colors = o3d.utility.Vector3dVector(color)
+        pcd_corner.append(local_point)
     
 
     
@@ -58,7 +70,10 @@ def draw_houses():
         for y in range(int(min_y)-5, int(max_y)+1+5):
             #if poly.contains(Point(x,y)):
             try:
-                np_points.append([x,y, DTM_array[DTM.index(x, y)]])
+                if poly.distance(Point(x,y))>2:
+                    np_points.append([x,y, DSM_array[DTM.index(x, y)]])
+                else:
+                    np_points.append([x,y, DTM_array[DTM.index(x, y)]])
                 if lines.contains(Point(x,y)):
                     np_line.append([x,y, DTM_array[DTM.index(x, y)]])
                     np_color_line.append([1, 0,0])
@@ -73,10 +88,13 @@ def draw_houses():
                     for j in range(len(house_pieces[i])):
                             if house_pieces[i][j].contains(Point(x,y)):      
                                 heigth = DSM_array[DSM.index(x, y)]
-                                np_house_pieces[i][j].append([x,y, heigth])
-                                #np_houses[i].append([x,y, DTM_array[DSM.index(x, y)]])
-                                np_house_pieces_color[i][j].append([0,0,1])
-                                #np_color_houses[i].append([0,0,1])
+                                if height<=heights[i]:
+                                    np_house_pieces[i][j].append([x,y, heigth])
+                                    #np_houses[i].append([x,y, DTM_array[DSM.index(x, y)]])
+                                    np_house_pieces_color[i][j].append([0,0,1])
+                                    #np_color_houses[i].append([0,0,1])
+                                else:
+                                    print(height, heights[i])
             except:
                 continue
     
@@ -96,7 +114,7 @@ def draw_houses():
     for x in range(int(min_x)-5, int(max_x)+1+5):
         for y in range(int(min_y)-5, int(max_y)+1+5):
             try:
-                np_color.append([0, (100/255)*(DSM_array[DSM.index(x, y)]-minimum)/space,0])
+                np_color.append([0, (DSM_array[DSM.index(x, y)]-minimum)/space+0.5*(maximum-DSM_array[DSM.index(x, y)])/space,0.1*(maximum-DSM_array[DSM.index(x, y)])/space])
             except:
                 continue
 
@@ -109,17 +127,7 @@ def draw_houses():
     pcd.points = o3d.utility.Vector3dVector(np_points)
     pcd.colors = o3d.utility.Vector3dVector(np_color)
 
-    pcd_walls = []
-    pcd_corner = []
-    heights = []
-    for house in houses:
-        wall, point, color, height = build_house(house, DSM, DSM_array, DTM, DTM_array)
-        pcd_walls.append(wall)
-        heights.append(height)
-        local_point = o3d.geometry.PointCloud()
-        local_point.points = o3d.utility.Vector3dVector(point)
-        local_point.colors = o3d.utility.Vector3dVector(color)
-        pcd_corner.append(local_point)
+    
 
     for i in range(len(houses)):
         for x,y in houses[i].exterior.coords:
