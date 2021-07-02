@@ -6,10 +6,11 @@ import open3d as o3d
 from polygon_collector import collector, house_collector
 from shapely.geometry import Polygon, Point, LineString, box
 from shapely.affinity import scale
-import time
+import os
 
 
-def draw_houses():
+
+def draw_houses(adress, city, save=True, filepath='', display=False):
     DSM = r'DSM13.tif'
     DTM = r'DTM13.tif'
     DSM = rasterio.open(DSM)
@@ -18,10 +19,10 @@ def draw_houses():
     DSM_array = np.where(DSM_array==-9999,0 , DSM_array)
     DTM_array = DTM.read(1)
     DTM_array = np.where(DTM_array==-9999,0 , DTM_array)
+    adress = 'Sijslostraat 39, 8020'
+    city = 'OOSTKAMP'
+    poly = collector(adress, city)
 
-    poly = collector('Sijslostraat 39, 8020', 'OOSTKAMP')
-
-    start = time.time()
     coords = list(poly.exterior.coords)
     lines = poly.exterior.buffer(0.5)
     min_x, max_x = coords[0][0], coords[0][0]
@@ -39,17 +40,7 @@ def draw_houses():
     house_pieces = [convex_pieces(house) for house in houses]
 
 
-    pcd_walls = []
-    pcd_corner = []
-    heights = []
-    for house in houses:
-        wall, point, color, height = build_house(house, DSM, DSM_array, DTM, DTM_array)
-        pcd_walls.append(wall)
-        heights.append(height)
-        local_point = o3d.geometry.PointCloud()
-        local_point.points = o3d.utility.Vector3dVector(point)
-        local_point.colors = o3d.utility.Vector3dVector(color)
-        pcd_corner.append(local_point)
+    
     
 
     
@@ -88,44 +79,55 @@ def draw_houses():
                     for j in range(len(house_pieces[i])):
                             if house_pieces[i][j].contains(Point(x,y)):      
                                 heigth = DSM_array[DSM.index(x, y)]
-                                if height<=heights[i]:
-                                    np_house_pieces[i][j].append([x,y, heigth])
-                                    #np_houses[i].append([x,y, DTM_array[DSM.index(x, y)]])
-                                    np_house_pieces_color[i][j].append([0,0,1])
-                                    #np_color_houses[i].append([0,0,1])
-                                else:
-                                    print(height, heights[i])
+                                np_house_pieces[i][j].append([x,y, heigth])
+                                #np_houses[i].append([x,y, DTM_array[DSM.index(x, y)]])
+                                np_house_pieces_color[i][j].append([0,0,1])
+                                #np_color_houses[i].append([0,0,1])
             except:
                 continue
     
     
     
     
-
+    
     np_points = np.array(np_points)
+    maximum = np_points[:,2].max()
+    minimum = np_points[:,2].min()
+    space = maximum-minimum
+    scaling_matrix = np.min(np_points, axis=0)
+    np_points = np_points - scaling_matrix
     np_line = np.array(np_line)
     np_color_line = np.array(np_color_line)
 
 
-    maximum = np_points[:,2].max()
-    minimum = np_points[:,2].min()
-    space = maximum-minimum
+    
     np_color = []
     for x in range(int(min_x)-5, int(max_x)+1+5):
         for y in range(int(min_y)-5, int(max_y)+1+5):
             try:
-                np_color.append([0, (DSM_array[DSM.index(x, y)]-minimum)/space+0.5*(maximum-DSM_array[DSM.index(x, y)])/space,0.1*(maximum-DSM_array[DSM.index(x, y)])/space])
+                np_color.append([0, max((DSM_array[DSM.index(x, y)]-minimum)/space, 0.5*(maximum-DSM_array[DSM.index(x, y)])/space),0.1*(maximum-DSM_array[DSM.index(x, y)])/space+0.01])
             except:
                 continue
 
             
-
+    
     np_color = np.array(np_color)
-
-
+    
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(np_points)
     pcd.colors = o3d.utility.Vector3dVector(np_color)
+
+    pcd_walls = []
+    pcd_corner = []
+    heights = []
+    for house in houses:
+        wall, point, color, height = build_house(house, DSM, DSM_array, DTM, DTM_array, scaling_matrix)
+        pcd_walls.append(wall)
+        heights.append(height)
+        local_point = o3d.geometry.PointCloud()
+        local_point.points = o3d.utility.Vector3dVector(point)
+        local_point.colors = o3d.utility.Vector3dVector(color)
+        pcd_corner.append(local_point)
 
     
 
@@ -148,6 +150,7 @@ def draw_houses():
                 np_house_pieces[i][j].append([x,y, heights[i]])
                 np_house_pieces_color[i][j].append([0,0,1])
             np_house_pieces[i][j] = np.array(np_house_pieces[i][j])
+            np_house_pieces[i][j] = np_house_pieces[i][j] -scaling_matrix
             np_house_pieces_color[i][j] = np.array(np_house_pieces_color[i][j])
             pcd_houses_pieces[i][j] = o3d.geometry.PointCloud()
             pcd_houses_pieces[i][j].points = o3d.utility.Vector3dVector(np_house_pieces[i][j])
@@ -196,21 +199,23 @@ def draw_houses():
     
     
 
-    pcd_roofs = []
-    for i in range(len(houses)):
-        pcd_roof = build_roof(pcd_houses[i], houses[i], heights[i])
-        if pcd_roof:
-            pcd_roofs.append(pcd_roof)
+ 
     #pcd_roofs2 = [build_roof(pcd_house)[1] for pcd_house in pcd_houses]
 
-    print(time.time()-start)
-    o3d.visualization.draw_geometries([poisson_mesh, *pcd_walls, *pcd_houses_meshes_connected], mesh_show_back_face=True) #*pcd_roofs, *pcd_houses  *pcd_corner,*tetra_meshes, *pcd_houses_meshes , pcd_houses_pieces_meshes 
+    if display:
+        o3d.visualization.draw_geometries([poisson_mesh, *pcd_walls, *pcd_houses_meshes_connected], mesh_show_back_face=True) #*pcd_roofs, *pcd_houses  *pcd_corner,*tetra_meshes, *pcd_houses_meshes , pcd_houses_pieces_meshes 
+    if save:
+        i=0
+        for mesh in [poisson_mesh]+pcd_walls+pcd_houses_meshes_connected:
+            o3d.io.write_triangle_mesh(f'mesh{i}.ply', mesh)
+            i = i+1
+               
 
     
 
 
 
-def build_house(house, DSM, DSM_array, DTM, DTM_array):
+def build_house(house, DSM, DSM_array, DTM, DTM_array, scaling_matrix):
     house = extend_polygon(house)
 
     points = []
@@ -237,6 +242,9 @@ def build_house(house, DSM, DSM_array, DTM, DTM_array):
     vertices = np.array(vertices)
     vertices, height_mean = wall_equalizer(vertices, DSM, DSM_array, DTM, DTM_array)
     triangles = np.array(triangles)
+
+    vertices = np.array(vertices)
+    vertices = vertices - scaling_matrix
 
     mesh.vertices = o3d.utility.Vector3dVector(vertices)
     mesh.triangles = o3d.utility.Vector3iVector(triangles)
@@ -399,6 +407,6 @@ def wall_equalizer(vertices, DSM, DSM_array, DTM, DTM_array):
 
 
 if __name__=='__main__':
-    draw_houses()
+    draw_houses('', '', save=False, filepath='', display=True)
 
 
