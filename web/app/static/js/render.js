@@ -71,8 +71,6 @@ plane.receiveShadow = false;
 
 // LOAD 3D MESH PLY
 const loader = new THREE.PLYLoader();
-const meshfile = 'mesh2.ply'
-
 function loadply(meshfile){
   loader.load(`./static/3d-models/${meshfile}`, function (geometry) {
     geometry.computeVertexNormals();
@@ -109,8 +107,9 @@ function loadply(meshfile){
     scene.add(mesh);
   });
 }
-for (let i = 0; i < 100; i++){
-  loadply(`mesh${i}.ply`);
+let nmesh = localStorage.getItem('nmesh')
+for (let i = 0; i < nmesh; i++){
+    loadply(`mesh${i}.ply`);
 }
 // CREATE CUBE
 // const geometry = new THREE.BoxGeometry();
