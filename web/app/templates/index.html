@@ -49,79 +49,124 @@
         </div-->
         <!-- GRID RESPONSIVE SYSTEM -->
         <div class="container-fluid">
+          <form action="http://0.0.0.0:5000/predict" method="post">
+            <div class="row">
+                <div class="col-lg-6">
+                  <div class="card mx-20 my-10">
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-sm">
+                          <label for="street" class="required">Street</label>
+                          <input type="text" class="form-control form-control-lg" name="street" placeholder="Street" required="required">
+                        </div>
+                        <div class="col-sm-2 ml-5">
+                          <label for="num" class="required">Number</label>
+                          <input type="text" class="form-control form-control-lg" name="num" placeholder="Num." required="required">
+                        </div>
+                      </div>
+                      <div class="row mt-5">
+                        <div class="col-sm-3">
+                          <label for="locality" class="required">Locality</label>
+                          <input type="text" class="form-control form-control-lg" name="locality" placeholder="Postal code" required="required">
+                        </div>
+                        <div class="col-sm ml-5">
+                          <label for="city" class="required">City</label>
+                          <input type="text" class="form-control form-control-lg" name="city" placeholder="City" required="required">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <!-- <label for="type-of-property" class="required">Type of property</label> -->
+                      <label for="type-of-property" class="required">Type of property</label>
+                      <select class="form-control" id="type-of-property" required="required">
+                        <option value="" selected="selected" disabled="disabled">Select type</option>
+                        <option value="house">House</option>
+                        <option value="apartment">Apartment</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="subtype-of-property" class="required">Subtype of property</label>
+                      <select class="form-control" id="subtype-of-property" required="required">
+                        <option value="" selected="selected" disabled="disabled">Select subtype</option>
+                        <option value="bungalow">bungalow</option>
+                        <option value="loft">loft</option>
+                      </select>
+                    </div>
+                    <div class="from-group">
+                      <div class="row">
+                        <div class="col-sm mr-5">
+                          <label for="number-of-facades" class="required">Number of facades</label>
+                          <input type="text" class="form-control form-control-lg" name="number-of-facades" required="required">
+                        </div>
+                        <div class="col-sm-4 mr-5">
+                          <label for="number-of-rooms" class="required">Number of rooms</label>
+                          <input type="text" class="form-control form-control-lg" name="number-of-rooms" required="required">
+                        </div>
+                        <div class="col-sm-4">
+                          <label for="surface-of-the-land" class="required">Surface of the land</label>
+                          <input type="text" class="form-control form-control-lg" name="surface-of-the-land" required="required">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card mx-20 my-10">
+                    <div class="form-group">
+                      <div class="custom-switch">
+                        <input type="checkbox" id="kitchen" value="">
+                        <label for="kitchen">Fully equipped kitchen</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="custom-switch">
+                        <input type="checkbox" id="terrace" value="">
+                        <label for="terrace">Terrace</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="custom-switch">
+                        <input type="checkbox" id="garden" value="">
+                        <label for="garden">Garden</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="custom-switch">
+                        <input type="checkbox" id="swimming-pool" value="">
+                        <label for="swimming-pool">Swimming pool</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="custom-switch">
+                        <input type="checkbox" id="furnished" value="">
+                        <label for="furnished">Furnished</label>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="custom-switch">
+                        <input type="checkbox" id="openfire" value="">
+                        <label for="openfire">Open fire</label>
+                      </div>
+                    </div>
+                      
+                    <p><input class="btn btn-primary" type="submit" value="Submit"></p>
+                  </div>
+                </div>
+            </div>
+          </form>
           <div class="row">
             <div class="col-lg-6">
               <!-- First card with Prediction -->
-                <div class="form-group">
-                      <form action="http://0.0.0.0:5000/predict" method="post">
-
-                         <p><input type="text" class="form-control form-control-lg" style="max-width:20%;display: initial" name="rue" placeholder="Rue">
-                             <input type="text" class="form-control form-control-lg" style="max-width:4em;display: initial" name="num" placeholder="Num."></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Locality" placeholder="CP">
-                         <input type="text" class="form-control form-control-lg" name="ville" placeholder="Ville"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Type of property" placeholder="Type of property"></p>
-                             <p><input type="text" class="form-control form-control-lg" name="Subtype of property" placeholder="Subtype of property"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Number of facades" placeholder="Number of facades"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Number of rooms" placeholder="Number of rooms"></p>
-                         <p><input type="text" class="form-control form-control-lg" name="Surface of the land" placeholder="Surface of the land"></p>
-
-                          <label for="Fully equipped kitchen">Fully equipped kitchen</label>
-                        <select  name="Fully equipped kitchen" id="Fully equipped kitchen">
-                            <option value="0">No</option>
-                            <option value="1">Yes</option>
-                        </select>
-
-                         <p><input type="text" class="form-control form-control-lg" name="Terrace" placeholder="Terrace"></p>
-
-                          <label for="Terrace">Terrace</label>
-                        <select  name="Terrace" id="Terrace">
-                            <option value="0">No</option>
-                            <option value="1">Yes</option>
-                        </select>
-
-                         <p><input type="text" class="form-control form-control-lg" name="Terrace Area" placeholder="Terrace Area"></p>
-
-                          <label for="Garden">Garden</label>
-                        <select  name="Terrace" id="Garden">
-                            <option value="0">No</option>
-                            <option value="1">Yes</option>
-                        </select>
-
-                         <p><input type="text" class="form-control form-control-lg" name="Garden Area" placeholder="Garden Area"></p>
-
-                          <label for="Swimming pool">Swimming pool</label>
-                        <select  name="Swimming pool" id="Swimming pool">
-                            <option value="0">No</option>
-                            <option value="1">Yes</option>
-                        </select>
-
-                          <label for="Furnished">Furnished</label>
-                        <select  name="Furnished" id="Furnished">
-                            <option value="0">No</option>
-                            <option value="1">Yes</option>
-                        </select>
-
-                          <p><input type="text" class="form-control form-control-lg" name="Open fire" placeholder="Open fire"></p>
-
-                          <label for="Open fire">Open fire</label>
-                        <select  name="Open fire" id="Open fire">
-                            <option value="0">No</option>
-                            <option value="1">Yes</option>
-                        </select>
-                         <p><input type="submit" value="submit"></p>
-                      </form>
-              </div>
-
-
               <div class="card mx-20 my-10">
-                <h2 class="card-title">Predicted Price</h2>
-                <p>{{ predict[0] }} €</p>
+                <h2 class="card-title">Description</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, nulla corporis voluptatibus quam totam aliquid reprehenderit quasi numquam incidunt aliquam.</p>
               </div>
             </div>
             <div class="col-lg-6">
               <!-- Second card for the 3D object rendering -->
               <div class="card mx-20 my-10">
                 <div class="mh-full">
+                  <h2 class="card-title">Predicted Price: {{ predict[0] }} €</h2>
                   <h2 class="card-title align-middle">
                     <div class="d-inline-flex align-items-center">
                       {{ weather.main.temp}} °C
