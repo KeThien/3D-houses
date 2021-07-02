@@ -19,8 +19,6 @@ def draw_houses(adress, city, save=True, filepath='', display=False):
     DSM_array = np.where(DSM_array==-9999,0 , DSM_array)
     DTM_array = DTM.read(1)
     DTM_array = np.where(DTM_array==-9999,0 , DTM_array)
-    adress = 'Sijslostraat 39, 8020'
-    city = 'OOSTKAMP'
     poly = collector(adress, city)
 
     coords = list(poly.exterior.coords)
