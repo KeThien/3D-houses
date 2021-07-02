@@ -37,22 +37,22 @@ def downvote():
     return str(votes)
 
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["POST", "GET"])
 def submit():
     if request.method == 'POST':
-        keyword = request.form['keyword']
-        return keyword
+        dict = request.form.to_dict(flat=False)
+        return dict
 
 
-@app.route('/predict', methods=['POST', 'GET'])
-def predict():
-    if request.method == 'POST':
-        number = request.form['nm']
-        return redirect(url_for('success', name=number))
+# @app.route('/predict', methods=['POST', 'GET'])
+# def predict():
+#     if request.method == 'POST':
+#         number = request.form['nm']
+#         return redirect(url_for('success', name=number))
 
-    else:
-        number = request.args.get('nm')
-        return redirect(url_for('success', name=number))
+#     else:
+#         number = request.args.get('nm')
+#         return redirect(url_for('success', name=number))
 
 
 if __name__ == '__main__':
