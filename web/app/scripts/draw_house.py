@@ -3,16 +3,16 @@ from rasterio.plot import show
 import matplotlib.pyplot as plt 
 import numpy as np
 import open3d as o3d
-from polygon_collector import collector, house_collector
+from .polygon_collector import collector, house_collector
 from shapely.geometry import Polygon, Point, LineString, box
 from shapely.affinity import scale
 import os
-
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def draw_houses(adress, city, save=True, filepath='', display=False):
-    DSM = r'DSM13.tif'
-    DTM = r'DTM13.tif'
+    DSM = f'{dir_path}/DSM13.tif'
+    DTM = f'{dir_path}/DTM13.tif'
     DSM = rasterio.open(DSM)
     DTM = rasterio.open(DTM)
     DSM_array = DSM.read(1)
@@ -34,6 +34,7 @@ def draw_houses(adress, city, save=True, filepath='', display=False):
     area_polygon = Polygon(area_limiter_points)
     #houses = house_collector(area_polygon, 'OOSTKAMP')
     houses = house_collector(poly, 'OOSTKAMP')
+    print(houses)
     houses = [extend_polygon(house) for house in houses]
     house_pieces = [convex_pieces(house) for house in houses]
 
@@ -197,21 +198,17 @@ def draw_houses(adress, city, save=True, filepath='', display=False):
     
     
 
- 
     #pcd_roofs2 = [build_roof(pcd_house)[1] for pcd_house in pcd_houses]
 
     if display:
         o3d.visualization.draw_geometries([poisson_mesh, *pcd_walls, *pcd_houses_meshes_connected], mesh_show_back_face=True) #*pcd_roofs, *pcd_houses  *pcd_corner,*tetra_meshes, *pcd_houses_meshes , pcd_houses_pieces_meshes 
     if save:
         i=0
+        
         for mesh in [poisson_mesh]+pcd_walls+pcd_houses_meshes_connected:
-            o3d.io.write_triangle_mesh(f'mesh{i}.ply', mesh)
+            o3d.io.write_triangle_mesh(f'{dir_path}/../static/3d-models/mesh{i}.ply', mesh)
             i = i+1
-               
-
-    
-
-
+            print(mesh)
 
 def build_house(house, DSM, DSM_array, DTM, DTM_array, scaling_matrix):
     house = extend_polygon(house)
@@ -405,6 +402,7 @@ def wall_equalizer(vertices, DSM, DSM_array, DTM, DTM_array):
 
 
 if __name__=='__main__':
-    draw_houses('', '', save=False, filepath='', display=True)
+    dir_path
+    draw_houses('Sint-Elooisstraat 1', 'OOSTKAMP', save=True)
 
 
