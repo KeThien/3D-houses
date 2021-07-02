@@ -54,8 +54,8 @@ addShadowedLight(1, 1, 1, 0xffffff, 1.35);
 addShadowedLight(0.5, 1, -1, 0xaaaabb, 1);
 
 // AXESHELPER
-const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(5);
+// scene.add(axesHelper);
 
 // PLANE
 const plane = new THREE.Mesh(
@@ -86,7 +86,7 @@ loader.load("./static/3d-models/my_mesh.ply", function (geometry) {
   // mesh.position.z = 0;
   mesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), -1.5708);
   // mesh.rotation.x = - Math.PI / 2;
-  mesh.scale.multiplyScalar(0.008);
+  mesh.scale.multiplyScalar(0.01);
 
   mesh.castShadow = true;
   mesh.receiveShadow = true;
