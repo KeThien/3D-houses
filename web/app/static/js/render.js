@@ -71,39 +71,47 @@ plane.receiveShadow = false;
 
 // LOAD 3D MESH PLY
 const loader = new THREE.PLYLoader();
-loader.load("./static/3d-models/my_mesh.ply", function (geometry) {
-  geometry.computeVertexNormals();
+const meshfile = 'mesh2.ply'
 
-  // var material = new THREE.MeshStandardMaterial( { color: 0x0055ff, flatShading: true, vertexColors: true } );
-  var material = new THREE.MeshStandardMaterial({
-    flatShading: true,
-    vertexColors: true,
+function loadply(meshfile){
+  loader.load(`./static/3d-models/${meshfile}`, function (geometry) {
+    geometry.computeVertexNormals();
+  
+    // var material = new THREE.MeshStandardMaterial( { color: 0x0055ff, flatShading: true, vertexColors: true } );
+    var material = new THREE.MeshStandardMaterial({
+      flatShading: true,
+      vertexColors: true,
+      side: THREE.DoubleSide
+    });
+    var mesh = new THREE.Mesh(geometry, material);
+  
+    // mesh.position.x = 0;
+    // mesh.position.y = 0;
+    // mesh.position.z = 0;
+    mesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), -1.5708);
+    // mesh.rotation.x = - Math.PI / 2;
+    mesh.scale.multiplyScalar(0.01);
+  
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    var position = {
+      x: mesh.position.x,
+      y: mesh.position.y,
+      z: mesh.position.z,
+    };
+  
+    //  CAMERA TARGET to object
+    controls.target = new THREE.Vector3(position);
+    var bb = new THREE.Box3();
+    bb.setFromObject(mesh);
+    bb.getCenter(controls.target);
+  
+    scene.add(mesh);
   });
-  var mesh = new THREE.Mesh(geometry, material);
-
-  // mesh.position.x = 0;
-  // mesh.position.y = 0;
-  // mesh.position.z = 0;
-  mesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), -1.5708);
-  // mesh.rotation.x = - Math.PI / 2;
-  mesh.scale.multiplyScalar(0.01);
-
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  var position = {
-    x: mesh.position.x,
-    y: mesh.position.y,
-    z: mesh.position.z,
-  };
-
-  //  CAMERA TARGET to object
-  controls.target = new THREE.Vector3(position);
-  var bb = new THREE.Box3();
-  bb.setFromObject(mesh);
-  bb.getCenter(controls.target);
-
-  scene.add(mesh);
-});
+}
+for (let i = 0; i < 100; i++){
+  loadply(`mesh${i}.ply`);
+}
 // CREATE CUBE
 // const geometry = new THREE.BoxGeometry();
 // const material = new THREE.MeshPhongMaterial( { color: 0x8844aa } );

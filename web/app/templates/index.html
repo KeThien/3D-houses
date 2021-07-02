@@ -49,62 +49,62 @@
         </div-->
         <!-- GRID RESPONSIVE SYSTEM -->
         <div class="container-fluid">
-          <form action="http://0.0.0.0:5000/predict" method="post">
+          <form action="/" method="POST">
             <div class="row">
                 <div class="col-lg-6">
                   <div class="card mx-20 my-10">
                     <div class="form-group">
                       <div class="row">
                         <div class="col-sm">
-                          <label for="street" class="required">Street</label>
-                          <input type="text" class="form-control form-control-lg" name="street" placeholder="Street" required="required">
+                          <label for="3d_street" class="required">Street</label>
+                          <input type="text" class="form-control form-control-lg" name="3d_street" placeholder="Street" required="required">
                         </div>
                         <div class="col-sm-2 ml-5">
-                          <label for="num" class="required">Number</label>
-                          <input type="text" class="form-control form-control-lg" name="num" placeholder="Num." required="required">
+                          <label for="3d_num" class="required">Number</label>
+                          <input type="text" class="form-control form-control-lg" name="3d_num" placeholder="Num." required="required">
                         </div>
                       </div>
                       <div class="row mt-5">
                         <div class="col-sm-3">
-                          <label for="locality" class="required">Locality</label>
-                          <input type="text" class="form-control form-control-lg" name="locality" placeholder="Postal code" required="required">
+                          <label for="Locality" class="required">Locality</label>
+                          <input type="text" class="form-control form-control-lg" name="Locality" placeholder="Postal code" required="required">
                         </div>
                         <div class="col-sm ml-5">
-                          <label for="city" class="required">City</label>
-                          <input type="text" class="form-control form-control-lg" name="city" placeholder="City" required="required">
+                          <label for="3d_city" class="required">City</label>
+                          <input type="text" class="form-control form-control-lg" name="3d_city" placeholder="City" required="required">
                         </div>
                       </div>
                     </div>
                     <div class="form-group">
                       <!-- <label for="type-of-property" class="required">Type of property</label> -->
-                      <label for="type-of-property" class="required">Type of property</label>
-                      <select class="form-control" id="type-of-property" required="required">
+                      <label for="Type of property" class="required">Type of property</label>
+                      <select class="form-control" id="type-of-property" required="required" name="Type of property">
                         <option value="" selected="selected" disabled="disabled">Select type</option>
                         <option value="house">House</option>
                         <option value="apartment">Apartment</option>
                       </select>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <label for="subtype-of-property" class="required">Subtype of property</label>
                       <select class="form-control" id="subtype-of-property" required="required">
                         <option value="" selected="selected" disabled="disabled">Select subtype</option>
                         <option value="bungalow">bungalow</option>
                         <option value="loft">loft</option>
                       </select>
-                    </div>
+                    </div> -->
                     <div class="from-group">
                       <div class="row">
                         <div class="col-sm mr-5">
-                          <label for="number-of-facades" class="required">Number of facades</label>
-                          <input type="text" class="form-control form-control-lg" name="number-of-facades" required="required">
+                          <label for="Number of facades">Number of facades</label>
+                          <input type="text" class="form-control form-control-lg" name="Number of facades">
                         </div>
                         <div class="col-sm-4 mr-5">
-                          <label for="number-of-rooms" class="required">Number of rooms</label>
-                          <input type="text" class="form-control form-control-lg" name="number-of-rooms" required="required">
+                          <label for="Number of rooms">Number of rooms</label>
+                          <input type="text" class="form-control form-control-lg" name="Number of rooms">
                         </div>
                         <div class="col-sm-4">
-                          <label for="surface-of-the-land" class="required">Surface of the land</label>
-                          <input type="text" class="form-control form-control-lg" name="surface-of-the-land" required="required">
+                          <label for="Surface of the land">Surface of the land</label>
+                          <input type="text" class="form-control form-control-lg" name="Surface of the land">
                         </div>
                       </div>
                     </div>
@@ -114,37 +114,31 @@
                   <div class="card mx-20 my-10">
                     <div class="form-group">
                       <div class="custom-switch">
-                        <input type="checkbox" id="kitchen" value="">
+                        <input type="checkbox" id="kitchen" value="1" name="Fully equipped kitchen">
                         <label for="kitchen">Fully equipped kitchen</label>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="custom-switch">
-                        <input type="checkbox" id="terrace" value="">
+                        <input type="checkbox" id="terrace" value="1" name="Terrace">
                         <label for="terrace">Terrace</label>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="custom-switch">
-                        <input type="checkbox" id="garden" value="">
+                        <input type="checkbox" id="garden" value="1" name="Garden">
                         <label for="garden">Garden</label>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="custom-switch">
-                        <input type="checkbox" id="swimming-pool" value="">
+                        <input type="checkbox" id="swimming-pool" value="1" name="Swimming pool">
                         <label for="swimming-pool">Swimming pool</label>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="custom-switch">
-                        <input type="checkbox" id="furnished" value="">
-                        <label for="furnished">Furnished</label>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="custom-switch">
-                        <input type="checkbox" id="openfire" value="">
+                        <input type="checkbox" id="openfire" value="1" name="Open fire">
                         <label for="openfire">Open fire</label>
                       </div>
                     </div>
