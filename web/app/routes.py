@@ -32,7 +32,7 @@ def index():
             dict3d = [dict.pop(key) for key in ['3d_street', '3d_num', '3d_city']]
             dict = {k: [int(v[0])] if v[0].isdigit() else v for k, v in dict.items()}
             predict = ML.to_predict.to_predict(dict)
-            # [['ertert'], ['34'], ['Bruxelles']]
+            
             files = glob.glob(f'{dir_path}/static/3d-models/*')
             nmesh = len(files)
             # for f in files:
@@ -51,14 +51,16 @@ def index():
 def load3d():
     global is_loading
     if request.method == 'POST':
+        is_loading = True
         dict = form
         dict3d = {key: dict[key] for key in dict.keys() & {'3d_street', '3d_num', '3d_city'}}
-        dict3d = list(dict3d.keys())
+        dict3d = list(dict3d.values())
         files = glob.glob(f'{dir_path}/static/3d-models/*')
         for f in files:
             os.remove(f)
-        draw_house.draw_houses(dict3d[0][0] + ' ' + dict3d[1][0], dict3d[2][0].upper())
-    return redirect('/')
+        # draw_house.draw_houses(dict3d[0][0] + ' ' + dict3d[1][0], dict3d[2][0].upper())
+    # return redirect('/')
+    return str(is_loading)
 
 # POST request to this endpoint(route) results in the number of votes after downvoting
 
