@@ -1,19 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
-
-
-import geopandas
-import pickle
-import numpy as np
-import pandas as pd
 import zipfile38 as zipfile
 import os
 import geopandas as gpd
-
-
-# In[ ]:
 
 
 def dezip(file):
@@ -21,37 +11,25 @@ def dezip(file):
     file.extractall('CRAB_dezip')
 
 
-# In[ ]:
-
-
 def clear_database(shape_file):
     
     a = x
-    shape_file =gpd.read_file('CRAB_dezip/Shapefile/CrabAdr.shp')
+    shape_file = gpd.read_file('CRAB_dezip/Shapefile/CrabAdr.shp')
     shape_file_clear = shape_file[['STRAATNM', 'HUISNR', 'NISCODE', 'GEMEENTE', 'geometry']]
     shape_file_clear = shape_file_clear.loc[shape_file_clear['GEMEENTE'] == f'{a}']
     return shape_file_clear
 
 
-# In[ ]:
-
-
-def rue(y)
+def rue(y):
     z = y
-    Rue = shape_file_clear.loc[shape_file_clear['STRAATNM'] == f'{z}']
-    return Rue
+    rue = shape_file_clear.loc[shape_file_clear['STRAATNM'] == f'{z}']
+    return rue
 
 
-# In[ ]:
-
-
-def numero(n)
+def numero(n):
     m = n
-    num = Rue.loc[sRue['HUISNR'] == f'{m}']
-    retrun num
-
-
-# In[ ]:
+    num = Rue.loc[Rue['HUISNR'] == f'{m}']
+    return num
 
 
 x = 'Leuven'
@@ -70,32 +48,10 @@ def CRAB(x):
     clear_database(shape_file)
     
     z = y
-    Rue(y)
+    rue(y)
     
     m = n 
-    num(n)
-
-
-# In[ ]:
+    numero(n)
 
 
 CRAB(x)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
