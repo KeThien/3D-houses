@@ -99,10 +99,12 @@ function loadply(meshfile){
     };
   
     //  CAMERA TARGET to object
-    controls.target = new THREE.Vector3(position);
-    var bb = new THREE.Box3();
-    bb.setFromObject(mesh);
-    bb.getCenter(controls.target);
+    if (meshfile=='mesh0.ply'){
+      controls.target = new THREE.Vector3(position);
+      var bb = new THREE.Box3();
+      bb.setFromObject(mesh);
+      bb.getCenter(controls.target);
+    }
   
     scene.add(mesh);
   });

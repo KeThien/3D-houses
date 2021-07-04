@@ -148,7 +148,7 @@
                       </div>
                     </div>
                       
-                    <p><input class="btn btn-primary" type="submit" value="Predict" id="calculate"><button class="btn btn-success ml-20" type="button" id="btn-load3d" onclick="btn_load3d()">Load 3D model</button></p>
+                    <p><input class="btn btn-primary" type="submit" value="Submit" id="calculate"></p>
                   </div>
                 </div>
             </div>
@@ -170,9 +170,11 @@
               <!-- Second card for the 3D object rendering -->
               <div class="card mx-20 my-10">
                 <div class="mh-full">
-                  {% if predict %}
-                    <h2 class="card-title">Predicted Price: {{ predict[0] }} €</h2>
-                  {% endif %}
+                  
+                    <h2 class="card-title">
+                      Predicted Price:
+                        <span id="prediction-text">{{ predict[0] }} {{'€' if predict else ''}}</span>
+                    </h2>
                   <h2 class="card-title align-middle">
                     
                   </h2>
@@ -180,16 +182,13 @@
                     <div id="loading" class="d-none">
                       <img src="./static/loading.gif" alt="">
                     </div>
-                    {% if is_loading %}
-                    <p>connard</p>
-                      <!-- <canvas id="myCanvas" class="w-full h-450"></canvas> -->
-                    {% else %}
-                    <canvas id="myCanvas" class="w-full h-450 d-none"></canvas>
-                    <div id="square-holder" >
-                      <div class="d-flex justify-content-center align-items-center w-full h-450 bg-dark-light">
-                        <h2>Submit to load 3d model <br>and price prediction</h2>
+                    <canvas id="myCanvas" class="w-full h-450 {{'d-none' if not(predict) else ''}}"></canvas>
+                    {% if not(predict) %}
+                      <div id="square-holder" >
+                        <div class="d-flex justify-content-center align-items-center w-full h-450 bg-dark-light">
+                          <h2>Submit to show price prediction <br>and load 3d model </h2>
+                        </div>
                       </div>
-                    </div>
                     {% endif %}
                   </div>
                 </div>

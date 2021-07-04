@@ -32,6 +32,13 @@ const buttonLoad3d = document.getElementById("btn-load3d")
 
 myForm.addEventListener("submit", () => {
     buttonSubmit.classList.add("disabled")
+    loading.classList.remove("d-none")
+    myCanvas.classList.add("d-none")
+    txt = document.createTextNode("Calculation in progress...")
+    document.getElementById("prediction-text").textContent = "Calculation in progress..."
+    if (squareHolder) {
+        squareHolder.classList.add("d-none")
+    }
 })
 // buttonLoad3d.addEventListener("click", () => {
 //     //new AJAX request
@@ -49,17 +56,19 @@ myForm.addEventListener("submit", () => {
 // })
 async function btn_load3d() {
     console.log("prout");
-    // loading.classList.remove("d-none")
-    // buttonSubmit.classList.add("disabled")
-    // buttonLoad3d.classList.add("disabled")
-    // if (myCanvas) {
-    //     myCanvas.classList.add("d-none")
-    // }
-    // if(squareHolder){
-    //     squareHolder.classList.add("d-none")
-    // }
-    const response = await fetch('/load3d', {
+    loading.classList.remove("d-none")
+    buttonSubmit.classList.add("disabled")
+    buttonLoad3d.classList.add("disabled")
+    myCanvas.classList.add("d-none")
+    squareHolder.classList.add("d-none")
+    
+    fetch('/load3d', {
         method: 'POST'
+    }).then((response)=>{
+        console.log('blob');
+        loading.classList.add("d-none")
+        buttonSubmit.classList.remove("disabled")
+        buttonLoad3d.classList.remove("disabled")
+        myCanvas.classList.remove("d-none")
     })
-    return response
 }

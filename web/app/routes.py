@@ -17,7 +17,6 @@ form = {
     'Number of rooms': ['4'],
     'Surface of the land': ['457']
     }
-is_loading = False
 
 @app.route('/', methods=['POST','GET'])
 @app.route('/index', methods=['POST','GET'])
@@ -28,6 +27,7 @@ def index():
     
     if request.method == 'POST':
         try:
+            form = request.form.to_dict(flat=False)
             dict = request.form.to_dict(flat=False)
             dict3d = [dict.pop(key) for key in ['3d_street', '3d_num', '3d_city']]
             dict = {k: [int(v[0])] if v[0].isdigit() else v for k, v in dict.items()}
@@ -35,41 +35,39 @@ def index():
             
             files = glob.glob(f'{dir_path}/static/3d-models/*')
             nmesh = len(files)
-            # for f in files:
-            #     os.remove(f)
-            # draw_house.draw_houses(dict3d[0][0] + ' ' + dict3d[1][0], dict3d[2][0].upper())
+            for f in files:
+                os.remove(f)
+            draw_house.draw_houses(dict3d[0][0] + ' ' + dict3d[1][0], dict3d[2][0].upper())
             return redirect('/')
         except ValueError:
             raise
     else:
         response = RequestWeather().request()
-        return render_template('index.html', title='3D Houses', weather=response, predict=predict, nmesh=nmesh, form=form, is_loading=is_loading)
+        return render_template('index.html', title='3D Houses', weather=response, predict=predict, nmesh=nmesh, form=form)
 
 # POST request to this endpoint(route) results in the number of votes after upvoting
 
-@app.route("/load3d", methods=["POST"])
-def load3d():
-    global is_loading
-    if request.method == 'POST':
-        is_loading = True
-        dict = form
-        dict3d = {key: dict[key] for key in dict.keys() & {'3d_street', '3d_num', '3d_city'}}
-        dict3d = list(dict3d.values())
-        files = glob.glob(f'{dir_path}/static/3d-models/*')
-        for f in files:
-            os.remove(f)
-        # draw_house.draw_houses(dict3d[0][0] + ' ' + dict3d[1][0], dict3d[2][0].upper())
-    # return redirect('/')
-    return str(is_loading)
+# @app.route("/load3d", methods=["POST"])
+# def load3d():
+#     if request.method == 'POST':
+#         dict = form
+#         dict3d = {key: dict[key] for key in dict.keys() & {'3d_street', '3d_num', '3d_city'}}
+#         dict3d = list(dict3d.values())
+#         files = glob.glob(f'{dir_path}/static/3d-models/*')
+#         for f in files:
+#             os.remove(f)
+#         draw_house.draw_houses(dict3d[0][0] + ' ' + dict3d[1][0], dict3d[2][0].upper())
+#     # return redirect('/')
+#     return str(dict3d)
 
 # POST request to this endpoint(route) results in the number of votes after downvoting
 
-@app.route("/down", methods=["POST"])
-def downvote():
-    global votes
-    if votes >= 1:
-        votes = votes - 1
-    return str(votes)
+# @app.route("/down", methods=["POST"])
+# def downvote():
+#     global votes
+#     if votes >= 1:
+#         votes = votes - 1
+#     return str(votes)
 
 # @app.route("/predict", methods=["POST", "GET"])
 # def submit():
