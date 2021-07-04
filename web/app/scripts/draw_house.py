@@ -1,5 +1,6 @@
 import rasterio
 from rasterio.plot import show
+from rasterio.windows import Window
 import matplotlib.pyplot as plt 
 import numpy as np
 import open3d as o3d
@@ -13,12 +14,16 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 def draw_houses(adress, city, save=True, filepath='', display=False):
     DSM = f'{dir_path}/DSM13.tif'
     DTM = f'{dir_path}/DTM13.tif'
+    
     DSM = rasterio.open(DSM)
     DTM = rasterio.open(DTM)
     DSM_array = DSM.read(1)
     DSM_array = np.where(DSM_array==-9999,0 , DSM_array)
     DTM_array = DTM.read(1)
     DTM_array = np.where(DTM_array==-9999,0 , DTM_array)
+    print(DSM.shape)
+    print(DSM_array.shape)
+
     poly = collector(adress, city)
 
     coords = list(poly.exterior.coords)
@@ -28,6 +33,7 @@ def draw_houses(adress, city, save=True, filepath='', display=False):
     for x, y in coords:
             min_x, max_x = min(min_x, x), max(max_x, x)
             min_y, max_y = min(min_y, y), max(max_y, y)
+    
 
 
     area_limiter_points = [Point(int(min_x)-5, int(min_y)-5),Point(int(min_x)-5, int(max_y)+5),Point(int(max_x)+5, int(max_y)+5),Point(int(max_x)+5, int(min_y)-5)]
@@ -90,6 +96,7 @@ def draw_houses(adress, city, save=True, filepath='', display=False):
     
     
     np_points = np.array(np_points)
+    print(np_points)
     maximum = np_points[:,2].max()
     minimum = np_points[:,2].min()
     space = maximum-minimum
@@ -402,7 +409,6 @@ def wall_equalizer(vertices, DSM, DSM_array, DTM, DTM_array):
 
 
 if __name__=='__main__':
-    dir_path
     draw_houses('Sint-Elooisstraat 1', 'OOSTKAMP', save=True)
 
 
