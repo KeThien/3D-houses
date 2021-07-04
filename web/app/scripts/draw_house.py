@@ -12,8 +12,8 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def draw_houses(adress, city, save=True, filepath='', display=False):
-    DSM = f'{dir_path}/DSM13.tif'
-    DTM = f'{dir_path}/DTM13.tif'
+    DSM = f'{dir_path}/geotif/DSM13.tif'
+    DTM = f'{dir_path}/geotif/DTM13.tif'
     
     DSM = rasterio.open(DSM)
     DTM = rasterio.open(DTM)

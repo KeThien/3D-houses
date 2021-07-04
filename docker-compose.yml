@@ -7,8 +7,16 @@ services:
       - "5000:5000"
     volumes:
       - ./web:/app
-      - ./DataFrame:/app/app/scripts/dataframe/
+      - ./geotif:/app/app/scripts/geotif/
+      # - ./DataFrame:/app/app/scripts/dataframe/
       - ./predict_ML:/app/app/scripts/predict/
+
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
   # geodataframe:
   #   build: ./DataFrame
   #   volumes:
