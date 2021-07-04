@@ -27,13 +27,18 @@
       <div-- class="content-wrapper p-20">
         <!-- DARK MODE BUTTON -->
         <div class="position-absolute top-0 right-0 z-10 pr-20 p-10">
-          <button
-            class="btn btn-square"
-            type="button"
-            onclick="halfmoon.toggleDarkMode()"
-          >
-            <i class="fa fa-moon-o" aria="true"></i>
-          </button>
+          <div class="d-inline-flex align-items-center">
+            <img src="http://openweathermap.org/img/wn/{{weather.weather[0].icon}}.png" alt="">
+            {{ weather.weather[0].main }}
+            {{ weather.main.temp}} °C
+            <button
+              class="btn btn-square ml-10"
+              type="button"
+              onclick="halfmoon.toggleDarkMode()"
+            >
+              <i class="fa fa-moon-o" aria="true"></i>
+            </button>
+          </div>
         </div>
         <h1>3D Houses & Predictions</h1>
         <!-- ADDRESS INPUT -->
@@ -49,62 +54,62 @@
         </div-->
         <!-- GRID RESPONSIVE SYSTEM -->
         <div class="container-fluid">
-          <form action="http://0.0.0.0:5000/predict" method="post">
+          <form action="/" method="POST" id="myForm">
             <div class="row">
                 <div class="col-lg-6">
                   <div class="card mx-20 my-10">
                     <div class="form-group">
                       <div class="row">
                         <div class="col-sm">
-                          <label for="street" class="required">Street</label>
-                          <input type="text" class="form-control form-control-lg" name="street" placeholder="Street" required="required">
+                          <label for="3d_street" class="required">Street, number</label>
+                          <input type="text" class="form-control form-control-lg" name="3d_street" value="{{form['3d_street'][0]}}" placeholder="Street" required="required">
                         </div>
                         <div class="col-sm-2 ml-5">
-                          <label for="num" class="required">Number</label>
-                          <input type="text" class="form-control form-control-lg" name="num" placeholder="Num." required="required">
+                          <label for="3d_num" class="required">Number</label>
+                          <input type="text" class="form-control form-control-lg" name="3d_num" value="{{form['3d_num'][0]}}" placeholder="Num." required="required">
                         </div>
                       </div>
                       <div class="row mt-5">
                         <div class="col-sm-3">
-                          <label for="locality" class="required">Locality</label>
-                          <input type="text" class="form-control form-control-lg" name="locality" placeholder="Postal code" required="required">
+                          <label for="Locality" class="required">Locality</label>
+                          <input type="text" class="form-control form-control-lg" name="Locality" value="{{form['Locality'][0]}}" placeholder="Postal code" required="required">
                         </div>
                         <div class="col-sm ml-5">
-                          <label for="city" class="required">City</label>
-                          <input type="text" class="form-control form-control-lg" name="city" placeholder="City" required="required">
+                          <label for="3d_city" class="required">City</label>
+                          <input type="text" class="form-control form-control-lg" name="3d_city" value="{{form['3d_city'][0]}}" placeholder="City" required="required">
                         </div>
                       </div>
                     </div>
                     <div class="form-group">
                       <!-- <label for="type-of-property" class="required">Type of property</label> -->
-                      <label for="type-of-property" class="required">Type of property</label>
-                      <select class="form-control" id="type-of-property" required="required">
-                        <option value="" selected="selected" disabled="disabled">Select type</option>
-                        <option value="house">House</option>
-                        <option value="apartment">Apartment</option>
+                      <label for="Type of property" class="required">Type of property</label>
+                      <select class="form-control" id="type-of-property" required="required" name="Type of property">
+                        <option value="" {{'selected' if form['Type of property'][0] == '' else ''}} disabled="disabled">Select type</option>
+                        <option value="house" {{'selected' if form['Type of property'][0] == 'house' else ''}} >House</option>
+                        <option value="apartment" {{'selected' if form['Type of property'][0] == 'apartment' else ''}} >Apartment</option>
                       </select>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <label for="subtype-of-property" class="required">Subtype of property</label>
                       <select class="form-control" id="subtype-of-property" required="required">
                         <option value="" selected="selected" disabled="disabled">Select subtype</option>
                         <option value="bungalow">bungalow</option>
                         <option value="loft">loft</option>
                       </select>
-                    </div>
+                    </div> -->
                     <div class="from-group">
                       <div class="row">
                         <div class="col-sm mr-5">
-                          <label for="number-of-facades" class="required">Number of facades</label>
-                          <input type="text" class="form-control form-control-lg" name="number-of-facades" required="required">
+                          <label for="Number of facades" class="required">Number of facades</label>
+                          <input type="text" class="form-control form-control-lg" name="Number of facades" value="{{form['Number of facades'][0]}}" required="required">
                         </div>
                         <div class="col-sm-4 mr-5">
-                          <label for="number-of-rooms" class="required">Number of rooms</label>
-                          <input type="text" class="form-control form-control-lg" name="number-of-rooms" required="required">
+                          <label for="Number of rooms" class="required">Number of rooms</label>
+                          <input type="text" class="form-control form-control-lg" name="Number of rooms" value="{{form['Number of rooms'][0]}}" required="required">
                         </div>
                         <div class="col-sm-4">
-                          <label for="surface-of-the-land" class="required">Surface of the land</label>
-                          <input type="text" class="form-control form-control-lg" name="surface-of-the-land" required="required">
+                          <label for="Surface of the land" class="required">Surface of the land</label>
+                          <input type="text" class="form-control form-control-lg" name="Surface of the land" value="{{form['Surface of the land'][0]}}" required="required">
                         </div>
                       </div>
                     </div>
@@ -114,42 +119,36 @@
                   <div class="card mx-20 my-10">
                     <div class="form-group">
                       <div class="custom-switch">
-                        <input type="checkbox" id="kitchen" value="">
+                        <input type="checkbox" id="kitchen" value="1" name="Fully equipped kitchen" {{'checked' if form['Fully equipped kitchen'] else ''}}>
                         <label for="kitchen">Fully equipped kitchen</label>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="custom-switch">
-                        <input type="checkbox" id="terrace" value="">
+                        <input type="checkbox" id="terrace" value="1" name="Terrace" {{'checked' if form['Terrace'] else ''}}>
                         <label for="terrace">Terrace</label>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="custom-switch">
-                        <input type="checkbox" id="garden" value="">
+                        <input type="checkbox" id="garden" value="1" name="Garden" {{'checked' if form['Garden'] else ''}}>
                         <label for="garden">Garden</label>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="custom-switch">
-                        <input type="checkbox" id="swimming-pool" value="">
+                        <input type="checkbox" id="swimming-pool" value="1" name="Swimming pool" {{'checked' if form['Swimming pool'] else ''}}>
                         <label for="swimming-pool">Swimming pool</label>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="custom-switch">
-                        <input type="checkbox" id="furnished" value="">
-                        <label for="furnished">Furnished</label>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="custom-switch">
-                        <input type="checkbox" id="openfire" value="">
+                        <input type="checkbox" id="openfire" value="1" name="Open fire" {{'checked' if form['Open fire'] else ''}}>
                         <label for="openfire">Open fire</label>
                       </div>
                     </div>
                       
-                    <p><input class="btn btn-primary" type="submit" value="Submit"></p>
+                    <p><input class="btn btn-primary" type="submit" value="Submit" id="calculate"></p>
                   </div>
                 </div>
             </div>
@@ -159,23 +158,38 @@
               <!-- First card with Prediction -->
               <div class="card mx-20 my-10">
                 <h2 class="card-title">Description</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, nulla corporis voluptatibus quam totam aliquid reprehenderit quasi numquam incidunt aliquam.</p>
+                <p>For now it's limited to certain area</p>
+                <p>Already tested with:</p> 
+                <ul>
+                  <li>Sint-Elooisstraat, 1 8020 OOSTKAMP</li>
+                  <li>Sijslostraat, 104 8020 OOSTKAMP</li>
+                </ul>
               </div>
             </div>
             <div class="col-lg-6">
               <!-- Second card for the 3D object rendering -->
               <div class="card mx-20 my-10">
                 <div class="mh-full">
-                  <h2 class="card-title">Predicted Price: {{ predict[0] }} €</h2>
+                  
+                    <h2 class="card-title">
+                      Predicted Price:
+                        <span id="prediction-text">{{ predict[0] }} {{'€' if predict else ''}}</span>
+                    </h2>
                   <h2 class="card-title align-middle">
-                    <div class="d-inline-flex align-items-center">
-                      {{ weather.main.temp}} °C
-                      <img src="http://openweathermap.org/img/wn/{{weather.weather[0].icon}}.png" alt="">
-                      {{ weather.weather[0].main }}
-                    </div>
+                    
                   </h2>
                   <div class="text-center">
-                    <canvas id="myCanvas" class="w-full h-450"></canvas>
+                    <div id="loading" class="d-none">
+                      <img src="./static/loading.gif" alt="">
+                    </div>
+                    <canvas id="myCanvas" class="w-full h-450 {{'d-none' if not(predict) else ''}}"></canvas>
+                    {% if not(predict) %}
+                      <div id="square-holder" >
+                        <div class="d-flex justify-content-center align-items-center w-full h-450 bg-dark-light">
+                          <h2>Submit to show price prediction <br>and load 3d model </h2>
+                        </div>
+                      </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -187,7 +201,9 @@
     <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
     <script>
       halfmoon.toggleDarkMode();
+      localStorage.setItem('nmesh', '{{nmesh}}');
     </script>
+    <script src="./static/js/AJAX.js"></script>
     <script src="./static/js/render.js"></script>
   </body>
 </html>

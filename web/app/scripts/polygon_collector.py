@@ -3,6 +3,8 @@ from geopy.geocoders import Nominatim
 import shapely
 from shapely.geometry import Polygon, Point
 from typing import List
+import os
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 def collector(adress: str, city: str, cadastre_path: str='')-> shapely.geometry.Polygon:
     """
@@ -13,7 +15,7 @@ def collector(adress: str, city: str, cadastre_path: str='')-> shapely.geometry.
         :return shapely.geometry.Polygon: polygon that determine the coordinates of the location (in Lambert 72 coordinates format)
     """
     if not cadastre_path:
-        cadastre_path = '{}_L72_2020'.format(city.upper())
+        cadastre_path = f'{dir_path}/{city.upper()}_L72_2020'
     geolocator = Nominatim(user_agent="12345876146")
     location = geolocator.geocode(adress)
     x, y = location.latitude, location.longitude
@@ -47,7 +49,7 @@ def house_collector(polygon, city,cadastre_path: str='')-> List[shapely.geometry
         :return List[shapely.geometry.Polygon]: List of polygons that determine the coordinates of each building (in Lambert 72 coordinates format)
     """
     if not cadastre_path:
-        cadastre_path = '{}_L72_2020'.format(city.upper())
+        cadastre_path = f'{dir_path}/{city.upper()}_L72_2020'
     cabu = gpd.read_file(cadastre_path+"/Bpn_CaBu.shp")
     houses = cabu[cabu.Type=='CL']
     polygons = []

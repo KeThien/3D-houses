@@ -13,6 +13,21 @@ data_path = os.path.join(os.path.dirname(__file__), "Data", "database.csv")
 path_model: str = "Eliza_XGB_Model.pkl"
 
 
+def print_entetes():
+    df: pd.DataFrame = pd.read_csv(data_path, index_col=0)
+
+    df = df.drop(axis=1, labels="Url")
+    df = df.drop(axis=1, labels="Source")
+    df = df.drop(axis=1, labels="Surface area of the plot of land")
+    df = df.drop(axis=1, labels="Region")
+    df = df.drop(axis=1, labels="Province")
+    df = df.drop(axis=1, labels="Type of sale")
+    df = df.drop("Price", axis=1)
+
+    print(df.columns)
+    print(df["Subtype of property"].value_counts())
+
+
 def knn(data_input: pd.DataFrame) -> np.ndarray:
     start = time.perf_counter()
     print("start knn")
