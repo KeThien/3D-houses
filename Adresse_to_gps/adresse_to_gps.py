@@ -1,32 +1,21 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# import zipfile38 as zipfile
-# import os
+
 import geopandas as gpd
 
 
-def clear_database(shape_file, ville):
+def CRAB(ville, rue, numero):
 
-    shape_file_clear = shape_file[['STRAATNM', 'HUISNR', 'NISCODE', 'GEMEENTE', 'geometry']]
-    shape_file_clear = shape_file_clear.loc[shape_file_clear['GEMEENTE'] == f'{ville}']
+    shape_file = gpd.read_file("CRAB_dezip/Shapefile/CrabAdr.shp")
+
+    shape_file_clear = shape_file[['STRAATNM', 'HUISNR', 'GEMEENTE', 'geometry']]
+    shape_file_clear.drop_duplicates(inplace=True)
+    shape_file_clear = shape_file_clear.loc[shape_file_clear['GEMEENTE'] == f'{ville}'
+                                            & shape_file_clear['STRAATNM'] == f'{rue}'
+                                            & shape_file_clear['HUISNR'] == f'{numero}']
 
     return shape_file_clear
-
-
-def CRAB(ville, rue, numero):
-    # os.mkdir('CRAB_dezip')
-    
-    # file = zipfile.ZipFile('CRAB_Adressenlijst_Shapefile.zip')
-    # file.extractall('CRAB_dezip')
-    
-    shape_file = gpd.read_file('CrabAdr.shp')
-    shape_file_clear = clear_database(shape_file, ville)
-
-    rue = shape_file_clear.loc[shape_file_clear['STRAATNM'] == f'{rue}']
-    numero = rue.loc[rue['HUISNR'] == f'{numero}']
-
-    return numero
 
 
 if __name__ == '__main__':
