@@ -39,7 +39,7 @@ def draw_houses(adress, city, save=True, filepath='', display=False):
     area_limiter_points = [Point(int(min_x)-5, int(min_y)-5),Point(int(min_x)-5, int(max_y)+5),Point(int(max_x)+5, int(max_y)+5),Point(int(max_x)+5, int(min_y)-5)]
     area_polygon = Polygon(area_limiter_points)
     #houses = house_collector(area_polygon, 'OOSTKAMP')
-    houses = house_collector(poly, 'OOSTKAMP')
+    houses = house_collector(poly, city)
     print(houses)
     houses = [extend_polygon(house) for house in houses]
     house_pieces = [convex_pieces(house) for house in houses]
