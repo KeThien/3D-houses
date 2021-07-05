@@ -38,11 +38,6 @@ def draw_houses(adress, city, save=True, filepath='', display=False):
     houses = [extend_polygon(house) for house in houses]
     house_pieces = [convex_pieces(house) for house in houses]
 
-
-    
-    
-
-    
     np_points = []
     np_houses = [[] for x in range(len(houses))]
     np_color_houses = [[] for x in range(len(houses))]
@@ -302,6 +297,6 @@ def wall_equalizer(vertices, DSM, DSM_array, DTM, DTM_array):
 
 
 if __name__=='__main__':
-    draw_houses('Sint-Elooisstraat 1', 'OOSTKAMP', save=False, display=True)
+    draw_houses('Slijslostraat 89, 8020', 'OOSTKAMP', save=False, display=True)
 
 

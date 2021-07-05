@@ -58,9 +58,10 @@ if __name__=='__main__':
     dir_path = os.path.dirname(os.path.realpath(__file__))
     CaDiKey = gpd.read_file(dir_path+"/OOSTKAMP_L72_2020/Apn_CaDi.shp")
     geolocator = Nominatim(user_agent="12345876146")
-    adress = 'Sijslostraat 104, 8020 OOSTKAMP'
+    adress = '9 Canadastraat, 8020 OOSTKAMP'
     location = geolocator.geocode(adress)
     x, y = location.latitude, location.longitude
+    print(x,y)
     point_location = Point(y,x)
     d = {'col1': ['my_point'], 'geometry': [point_location]}
     gdf = gpd.GeoDataFrame(d, crs="EPSG:4326")
@@ -68,9 +69,14 @@ if __name__=='__main__':
     point_location = gdf.geometry[0]
     for row in CaDiKey.geometry.items():
         if row[1].contains(point_location):
+            print('ok')
             poly_oostkamp = row[1]
+    for index, row in CaDiKey.iterrows():
+        if row.geometry.contains(point_location):
+            print(row.CaDiKey)
 
     
-    haircutter('DSM13.tif',poly_oostkamp, 'oostkamp_dsm.tif')
-    haircutter('DTM13.tif',poly_oostkamp, 'oostkamp_dtm.tif')
+    #haircutter('DSM13.tif',poly_oostkamp, 'oostkamp_dsm.tif')
+    #
+    #haircutter('DTM13.tif',poly_oostkamp, 'oostkamp_dtm.tif')
 
