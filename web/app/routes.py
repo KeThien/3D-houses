@@ -38,7 +38,7 @@ def index():
             nmesh = len(files)
             for f in files:
                 os.remove(f)
-            draw_house.draw_houses(dict3d['3d_street'][0] + ' ' + dict3d['3d_num'][0], dict3d['3d_city'][0].upper())
+            draw_house.draw_houses(dict3d['3d_street'][0] + ' ' + dict3d['3d_num'][0] + ' ' + str(dict['Locality'][0]), dict3d['3d_city'][0].upper())
             return redirect('/')
         except ValueError:
             raise

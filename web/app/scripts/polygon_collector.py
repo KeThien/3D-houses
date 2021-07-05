@@ -50,15 +50,31 @@ def house_collector(polygon, city,cadastre_path: str='')-> List[shapely.geometry
     """
     if not cadastre_path:
         cadastre_path = f'{dir_path}/{city.upper()}_L72_2020'
-    cabu = gpd.read_file(cadastre_path+"/Bpn_CaBu.shp")
-    houses = cabu[cabu.Type=='CL']
-    polygons = []
-    for index, row in houses.iterrows():
-        house = row.geometry
-        if polygon.contains(house) or house.intersection(polygon).area>=0.1*house.area:
-            polygons.append(house)
-    return polygons
-
+    try: 
+        cabu = gpd.read_file(cadastre_path+"/Bpn_CaBu.shp")
+        houses = cabu[cabu.Type=='CL']
+        polygons = []
+        for index, row in houses.iterrows():
+            house = row.geometry
+            if polygon.contains(house) or house.intersection(polygon).area>=0.1*house.area:
+                polygons.append(house)
+        return polygons
+    except: 
+        cabu = None
+        
+    try:
+        rebu = gpd.read_file(cadastre_path+"/Bpn_ReBu.shp")
+        houses = rebu[rebu.Type=='BUILDING']
+        polygons = []
+        for index, row in houses.iterrows():
+            house = row.geometry
+            if polygon.contains(house) or house.intersection(polygon).area>=0.1*house.area:
+                polygons.append(house)
+        return polygons
+    except:
+        rebu = None
+        
+    return []
 
 if __name__=='__main__':
     poly = collector('Kanunnik Andriesstraat 8, 8020', 'Oostkamp')

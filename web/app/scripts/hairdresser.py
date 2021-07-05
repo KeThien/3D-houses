@@ -1,10 +1,9 @@
-import rasterio
 import rioxarray
-from rasterio.plot import show
-from rasterio.mask import mask
-import matplotlib.pyplot as plt 
-import numpy as np
-import open3d as o3d
+# from rasterio.plot import show
+# from rasterio.mask import mask
+# import matplotlib.pyplot as plt 
+# import numpy as np
+# import open3d as o3d
 from polygon_collector import collector, house_collector
 import shapely
 from shapely.geometry import Polygon, Point, point
@@ -56,11 +55,12 @@ if __name__=='__main__':
     #haircutter('DSM13.tif', poly, True, 'clipped_ext2.tif')
     #houses = house_collector(poly, 'OOSTKAMP')
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    CaDiKey = gpd.read_file(dir_path+"/OOSTKAMP_L72_2020/Apn_CaDi.shp")
+    CaDiKey = gpd.read_file(dir_path+"/BRUGGE_L72_2020/Apn_CaDi.shp")
     geolocator = Nominatim(user_agent="12345876146")
-    adress = 'Sijslostraat 104, 8020 OOSTKAMP'
+    adress = 'Tillegemstraat 87, 8200 BRUGGE'
     location = geolocator.geocode(adress)
     x, y = location.latitude, location.longitude
+    print(x ,y)
     point_location = Point(y,x)
     d = {'col1': ['my_point'], 'geometry': [point_location]}
     gdf = gpd.GeoDataFrame(d, crs="EPSG:4326")
@@ -71,6 +71,11 @@ if __name__=='__main__':
             poly_oostkamp = row[1]
 
     
-    haircutter('DSM13.tif',poly_oostkamp, 'oostkamp_dsm.tif')
-    haircutter('DTM13.tif',poly_oostkamp, 'oostkamp_dtm.tif')
+    # haircutter(f'{dir_path}/../../../geotif/DSM13.tif',poly_oostkamp, f'{dir_path}/../../../geotif/brugge_dsm.tif')
+    # haircutter(f'{dir_path}/../../../geotif/DTM13.tif',poly_oostkamp, f'{dir_path}/../../../geotif/brugge_dtm.tif')
+
+# ADDRESS LIST
+# Sijslostraat 104, 8020 OOSTKAMP
+# Tillegemstraat 87, 8200 BRUGGE
+# Holleweg 1, 8340 DAMME
 
