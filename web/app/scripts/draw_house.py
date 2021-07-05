@@ -4,7 +4,7 @@ from rasterio.windows import Window
 import matplotlib.pyplot as plt 
 import numpy as np
 import open3d as o3d
-from polygon_collector import collector, house_collector
+from .polygon_collector import collector, house_collector
 from shapely.geometry import Polygon, Point, LineString, box
 from shapely.affinity import scale
 import os
@@ -12,8 +12,8 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def draw_houses(adress, city, save=True, filepath='', display=False):
-    DSM = f'{dir_path}/oostkamp_dsm.tif'
-    DTM = f'{dir_path}/oostkamp_dtm.tif'
+    DSM = f'{dir_path}/{city.lower()}_dsm.tif'
+    DTM = f'{dir_path}/{city.lower()}_dtm.tif'
     
     DSM = rasterio.open(DSM)
     DTM = rasterio.open(DTM)
@@ -22,7 +22,7 @@ def draw_houses(adress, city, save=True, filepath='', display=False):
     DTM_array = DTM.read(1)
     DTM_array = np.where(DTM_array==-9999,0 , DTM_array)
 
-    
+
     poly = collector(adress, city)
 
     coords = list(poly.exterior.coords)
@@ -34,7 +34,7 @@ def draw_houses(adress, city, save=True, filepath='', display=False):
             min_y, max_y = min(min_y, y), max(max_y, y)
     
 
-    houses = house_collector(poly, 'OOSTKAMP')
+    houses = house_collector(poly, city)
     houses = [extend_polygon(house) for house in houses]
     house_pieces = [convex_pieces(house) for house in houses]
 
