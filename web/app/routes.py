@@ -42,7 +42,6 @@ def index():
             return redirect('/')
         except ValueError:
             raise
-            # return redirect('/')
     else:
         response = RequestWeather().request()
         return render_template('index.html', title='3D Houses', weather=response, predict=predict, nmesh=nmesh, form=form)
