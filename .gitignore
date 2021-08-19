@@ -1,4 +1,5 @@
 .vscode
+
 # Big geotif files
 *.tif
 # web/app/scripts/OOSTKAMP*
@@ -131,3 +132,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# user ignore
+geotif.zip
+*.ply

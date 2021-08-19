@@ -1,3 +1,5 @@
+import pickle
+
 from .lat_long import get_lat_from_zip, get_long_from_zip
 import pandas as pd
 

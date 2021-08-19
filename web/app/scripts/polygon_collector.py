@@ -4,6 +4,7 @@ import shapely
 from shapely.geometry import Polygon, Point
 from typing import List
 import os
+import googlemaps
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 def collector(adress: str, city: str, cadastre_path: str='')-> shapely.geometry.Polygon:
@@ -16,9 +17,13 @@ def collector(adress: str, city: str, cadastre_path: str='')-> shapely.geometry.
     """
     if not cadastre_path:
         cadastre_path = f'{dir_path}/{city.upper()}_L72_2020'
-    geolocator = Nominatim(user_agent="12345876146")
-    location = geolocator.geocode(adress)
-    x, y = location.latitude, location.longitude
+    #geolocator = Nominatim(user_agent="12345876146")
+    gmaps = googlemaps.Client(key='AIzaSyCZtvRS9zekqjZM5NzFwf-J9sJPZZLsq5s')
+    geocode_result = gmaps.geocode(adress+ " " + city)
+    location = geocode_result[0]["geometry"]["location"]
+    #location = geolocator.geocode(adress)
+    x, y = location['lat'], location['lng']
+    #x, y = location.latitude, location.longitude
 
     cadastre = gpd.read_file(cadastre_path+"/Bpn_CaPa.shp")
     CaDiKey = gpd.read_file(cadastre_path+"/Apn_CaDi.shp")
@@ -50,15 +55,31 @@ def house_collector(polygon, city,cadastre_path: str='')-> List[shapely.geometry
     """
     if not cadastre_path:
         cadastre_path = f'{dir_path}/{city.upper()}_L72_2020'
-    cabu = gpd.read_file(cadastre_path+"/Bpn_CaBu.shp")
-    houses = cabu[cabu.Type=='CL']
-    polygons = []
-    for index, row in houses.iterrows():
-        house = row.geometry
-        if polygon.contains(house) or house.intersection(polygon).area>=0.1*house.area:
-            polygons.append(house)
-    return polygons
-
+    try: 
+        cabu = gpd.read_file(cadastre_path+"/Bpn_CaBu.shp")
+        houses = cabu[cabu.Type=='CL']
+        polygons = []
+        for index, row in houses.iterrows():
+            house = row.geometry
+            if polygon.contains(house) or house.intersection(polygon).area>=0.1*house.area:
+                polygons.append(house)
+        return polygons
+    except: 
+        cabu = None
+        
+    try:
+        rebu = gpd.read_file(cadastre_path+"/Bpn_ReBu.shp")
+        houses = rebu[rebu.Type=='BUILDING']
+        polygons = []
+        for index, row in houses.iterrows():
+            house = row.geometry
+            if polygon.contains(house) or house.intersection(polygon).area>=0.1*house.area:
+                polygons.append(house)
+        return polygons
+    except:
+        rebu = None
+        
+    return []
 
 if __name__=='__main__':
     poly = collector('Kanunnik Andriesstraat 8, 8020', 'Oostkamp')

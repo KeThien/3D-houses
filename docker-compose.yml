@@ -7,28 +7,12 @@ services:
       - "5000:5000"
     volumes:
       - ./web:/app
-      - ./DataFrame:/app/app/scripts/dataframe/
+      - ./geotif:/app/app/scripts/geotif/
       - ./predict_ML:/app/app/scripts/predict/
-  # geodataframe:
-  #   build: ./DataFrame
-  #   volumes:
-  #     - ./DataFrame:/app
-  # qgis-server:
-  #   build: ./qgis-server
-  #   ports:
-  #     - "5555:5555"
-  #   volumes:
-  #     - ./qgis-server/data:/data:ro
-  #   environment:
-  #     - LANG=en_EN.UTF-8
-  #     - QGIS_SERVER_LOG_LEVEL=0
-  #     - QGIS_PROJECT_FILE=/data/osm.qgs
-  #     - DEBUG=1
-  # nginx:
-  #   image: nginx:1.13
-  #   ports:
-  #   - 8080:80
-  #   volumes:
-  #   - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-  #   depends_on:
-  #   - qgis-server
+
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s

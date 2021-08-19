@@ -1,14 +1,17 @@
-import rasterio
 import rioxarray
-from rasterio.plot import show
-from rasterio.mask import mask
-import matplotlib.pyplot as plt 
-import numpy as np
-import open3d as o3d
+# from rasterio.plot import show
+# from rasterio.mask import mask
+# import matplotlib.pyplot as plt 
+# import numpy as np
+# import open3d as o3d
 from polygon_collector import collector, house_collector
 import shapely
-from shapely.geometry import Polygon, Point
+from shapely.geometry import Polygon, Point, point
 from shapely.affinity import scale
+import geopandas as gpd
+import os
+from geopy.geocoders import Nominatim
+
 
 
 def haircutter(tif_path: str, polygon: shapely.geometry.Polygon, save_path: str="clipped.tif"):
@@ -47,10 +50,32 @@ def haircutter(tif_path: str, polygon: shapely.geometry.Polygon, save_path: str=
 
 
 if __name__=='__main__':
-    poly = collector('Sijslostraat 39, 8020', 'OOSTKAMP')
+    #poly = collector('Sijslostraat 39, 8020', 'OOSTKAMP')
     #haircutter('DSM13.tif', scale(poly, xfact=1.5, yfact=1.5), True, 'clipped_ext.tif')
     #haircutter('DSM13.tif', poly, True, 'clipped_ext2.tif')
-    houses = house_collector(poly, 'OOSTKAMP')
+    #houses = house_collector(poly, 'OOSTKAMP')
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    CaDiKey = gpd.read_file(dir_path+"/BRUGGE_L72_2020/Apn_CaDi.shp")
+    geolocator = Nominatim(user_agent="12345876146")
+    adress = 'Tillegemstraat 87, 8200 BRUGGE'
+    location = geolocator.geocode(adress)
+    x, y = location.latitude, location.longitude
+    print(x ,y)
+    point_location = Point(y,x)
+    d = {'col1': ['my_point'], 'geometry': [point_location]}
+    gdf = gpd.GeoDataFrame(d, crs="EPSG:4326")
+    gdf = gdf.to_crs(CaDiKey.crs)
+    point_location = gdf.geometry[0]
+    for row in CaDiKey.geometry.items():
+        if row[1].contains(point_location):
+            poly_oostkamp = row[1]
 
-    haircutter('DSM13.tif', houses[0], 'houses.tif')
+    
+    # haircutter(f'{dir_path}/../../../geotif/DSM13.tif',poly_oostkamp, f'{dir_path}/../../../geotif/brugge_dsm.tif')
+    # haircutter(f'{dir_path}/../../../geotif/DTM13.tif',poly_oostkamp, f'{dir_path}/../../../geotif/brugge_dtm.tif')
+
+# ADDRESS LIST
+# Sijslostraat 104, 8020 OOSTKAMP
+# Tillegemstraat 87, 8200 BRUGGE
+# Holleweg 1, 8340 DAMME
 
