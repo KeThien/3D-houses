@@ -10,7 +10,7 @@
   <p align="center">
     Machine Learning project: Real estate prediction with 3d Houses render from Lidar Data
     <br />
-    <a href="#">View Demo</a>
+  <a href="http://nathanael-mrl.be/">View Demo</a> from <a href="https://github.com/Nathanael-Mariaule">Nathanaël Mariaule</a>
   </p>
 </p>
 
